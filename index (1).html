@@ -1,0 +1,3692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Scholar Connect — AI Faculty Matching System</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --navy:         #0e1a2e;
+  --navy-mid:     #162340;
+  --navy-light:   #1e3057;
+  --ivory:        #f4f1eb;
+  --ivory-dark:   #ede9e0;
+  --ivory-mid:    #e8e3d8;
+  --gold:         #c9973b;
+  --gold-light:   #d4a84b;
+  --gold-dim:     rgba(201,151,59,0.18);
+  --bg:           var(--ivory);
+  --surface:      #ffffff;
+  --surface2:     var(--ivory-dark);
+  --border:       #d5cfc3;
+  --border-navy:  rgba(14,26,46,0.12);
+  --text:         var(--navy);
+  --muted:        #7a7060;
+  --card-bg:      #ffffff;
+  --green-accent: #2d7a4f;
+  --red-accent:   #b94040;
+  --blue-accent:  #2e5fa3;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+.view { display: none; }
+.view.active { display: block; }
+
+/* LOGIN */
+.login-wrapper { display: flex; min-height: 100vh; }
+.login-left {
+  width: 46%; background: var(--navy);
+  display: flex; align-items: center; padding: 52px;
+  position: relative; overflow: hidden;
+}
+.login-left::before {
+  content: ''; position: absolute; top: -90px; right: -90px;
+  width: 340px; height: 340px; border-radius: 50%;
+  background: rgba(201,151,59,0.06); pointer-events: none;
+}
+.login-left::after {
+  content: ''; position: absolute; bottom: -70px; left: -70px;
+  width: 280px; height: 280px; border-radius: 50%;
+  background: rgba(255,255,255,0.03); pointer-events: none;
+}
+.login-left-inner { position: relative; z-index: 1; max-width: 420px; }
+.login-eyebrow {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 2.5px; color: rgba(255,255,255,0.3); margin-bottom: 18px;
+}
+.login-brand {
+  font-family: 'Cormorant Garamond', serif; font-size: 72px; font-weight: 600;
+  font-style: italic; color: #fff; line-height: 1.0; margin-bottom: 6px; letter-spacing: -1px;
+}
+.login-brand span { color: var(--gold); }
+.login-tagline {
+  color: rgba(255,255,255,0.5); font-size: 14px; line-height: 1.7;
+  margin-bottom: 44px; max-width: 340px;
+}
+.login-feature-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 44px; }
+.login-lcard {
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; padding: 18px;
+}
+.login-lcard-icon { font-size: 20px; display: block; margin-bottom: 10px; }
+.login-lcard h3 {
+  font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 600;
+  color: #fff; margin-bottom: 6px;
+}
+.login-lcard p { color: rgba(255,255,255,0.45); font-size: 12px; line-height: 1.5; }
+.login-est {
+  display: flex; align-items: center; gap: 12px; font-size: 10px; font-weight: 600;
+  letter-spacing: 2px; color: rgba(255,255,255,0.2); text-transform: uppercase;
+}
+.login-est-line { flex: 0 0 32px; height: 1px; background: rgba(255,255,255,0.15); }
+.login-right {
+  flex: 1; display: flex; align-items: center; justify-content: center; background: var(--ivory);
+}
+.login-form-wrap { width: 100%; max-width: 520px; padding: 52px 64px; }
+.login-form-header { margin-bottom: 36px; }
+.login-form-header h2 {
+  font-family: 'Cormorant Garamond', serif; font-size: 46px; font-weight: 600;
+  color: var(--navy); letter-spacing: -0.5px; margin-bottom: 8px; line-height: 1.1;
+}
+.login-form-header p { color: var(--muted); font-size: 14px; }
+.form-body { display: flex; flex-direction: column; gap: 20px; }
+.field-group { display: flex; flex-direction: column; gap: 7px; }
+.field-group label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1.3px; color: var(--navy);
+}
+.field-group input {
+  background: var(--surface); border: 1.5px solid var(--border); border-radius: 6px;
+  padding: 13px 16px; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text);
+  outline: none; transition: border-color 0.2s; width: 100%;
+}
+.field-group input:focus { border-color: var(--navy); }
+.field-group input::placeholder { color: #b8b2a8; }
+.label-row { display: flex; justify-content: space-between; align-items: center; }
+.forgot-link { font-size: 12px; color: var(--gold); text-decoration: none; font-weight: 500; }
+.forgot-link:hover { text-decoration: underline; }
+.password-wrapper { position: relative; }
+.password-wrapper input { padding-right: 46px; }
+.toggle-pw {
+  position: absolute; right: 14px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; color: var(--muted); cursor: pointer;
+  padding: 0; display: flex; align-items: center;
+}
+.toggle-pw:hover { color: var(--navy); }
+.role-divider {
+  text-align: center; font-size: 11px; color: var(--muted); text-transform: uppercase;
+  letter-spacing: 1.2px; font-weight: 500; position: relative; padding: 4px 0;
+}
+.role-divider::before, .role-divider::after {
+  content: ''; position: absolute; top: 50%; width: 28%; height: 1px; background: var(--border);
+}
+.role-divider::before { left: 0; }
+.role-divider::after  { right: 0; }
+.login-btn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+.btn-role {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 22px 16px; border-radius: 10px; border: 1.5px solid transparent;
+  cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.22s ease; text-align: center;
+}
+.role-icon { font-size: 26px; line-height: 1; }
+.role-label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; }
+.role-sub { font-size: 11px; opacity: 0.65; font-weight: 400; }
+.btn-student { background: var(--navy); color: #fff; border-color: var(--navy); }
+.btn-student:hover { background: var(--navy-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(14,26,46,0.22); }
+.btn-faculty { background: var(--surface); color: var(--navy); border-color: var(--gold); }
+.btn-faculty:hover { background: var(--gold); color: var(--navy); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(201,151,59,0.25); }
+.login-footer {
+  margin-top: 40px; padding-top: 22px; border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 16px;
+}
+.login-footer p { font-size: 11px; color: var(--muted); line-height: 1.6; }
+.login-footer small { font-size: 9.5px; letter-spacing: 0.5px; text-transform: uppercase; }
+.footer-links { display: flex; gap: 14px; flex-shrink: 0; }
+.footer-links a { font-size: 11.5px; color: var(--muted); text-decoration: none; cursor: pointer; }
+.footer-links a:hover { color: var(--navy); text-decoration: underline; }
+
+/* DEMO CREDENTIALS BOX */
+.demo-creds {
+  background: rgba(201,151,59,0.07); border: 1px solid rgba(201,151,59,0.25);
+  border-radius: 8px; padding: 14px 16px; margin-top: 16px;
+}
+.demo-creds-title {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px;
+  color: var(--gold); margin-bottom: 8px;
+}
+.demo-creds-row {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px; padding: 3px 0; border-bottom: 1px solid rgba(201,151,59,0.15);
+}
+.demo-creds-row:last-child { border-bottom: none; }
+.demo-creds-row span { color: var(--muted); }
+.demo-creds-row strong { color: var(--navy); font-family: 'Courier New', monospace; font-size: 11px; }
+.demo-fill-btn {
+  background: none; border: none; color: var(--gold); font-size: 10px; font-weight: 600;
+  cursor: pointer; text-transform: uppercase; letter-spacing: 0.5px; padding: 2px 6px;
+  border-radius: 3px; transition: background 0.15s;
+}
+.demo-fill-btn:hover { background: rgba(201,151,59,0.1); }
+
+/* SHARED DASHBOARD */
+.navbar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 32px; height: 60px; background: var(--navy);
+  border-bottom: 1px solid var(--navy-light); position: sticky; top: 0; z-index: 100;
+}
+.logo { font-family: 'Cormorant Garamond', serif; font-weight: 600; font-size: 26px; letter-spacing: 0.5px; color: #fff; }
+.logo span { color: var(--gold); }
+.nav-links { display: flex; gap: 2px; }
+.nav-link {
+  padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 500;
+  letter-spacing: 0.8px; color: rgba(255,255,255,0.55); transition: all 0.2s;
+  border: none; background: none; font-family: 'Inter', sans-serif; text-transform: uppercase;
+}
+.nav-link:hover { color: #fff; background: rgba(255,255,255,0.08); }
+.nav-link.active { color: var(--gold); background: rgba(201,151,59,0.12); }
+.nav-badge {
+  display: inline-block; background: var(--gold); color: var(--navy);
+  border-radius: 999px; font-size: 10px; padding: 1px 6px; margin-left: 4px; font-weight: 700;
+}
+.navbar-right { display: flex; align-items: center; gap: 14px; }
+.user-pill {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 500;
+  color: rgba(255,255,255,0.8);
+}
+.student-pill { border-left: 3px solid rgba(46,95,163,0.8); }
+.faculty-pill  { border-left: 3px solid var(--gold); }
+.logout-btn {
+  background: none; border: 1px solid rgba(255,255,255,0.2); padding: 6px 14px;
+  border-radius: 6px; font-size: 12px; color: rgba(255,255,255,0.5); cursor: pointer;
+  transition: all 0.2s; text-decoration: none; font-family: 'Inter', sans-serif;
+}
+.logout-btn:hover { background: rgba(255,255,255,0.1); color: #fff; border-color: rgba(255,255,255,0.4); }
+
+.app-layout { display: flex; min-height: calc(100vh - 60px); }
+.sidebar {
+  width: 220px; flex-shrink: 0; background: var(--navy);
+  border-right: 1px solid var(--navy-light); padding: 20px 12px;
+  display: flex; flex-direction: column; gap: 4px;
+}
+.sidebar-section {
+  font-size: 9.5px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 1.5px; color: rgba(255,255,255,0.3); padding: 12px 10px 6px;
+}
+.sidebar-item {
+  display: flex; align-items: center; gap: 10px; padding: 9px 12px;
+  border-radius: 4px; cursor: pointer; color: rgba(255,255,255,0.5);
+  font-size: 13px; font-weight: 400; transition: all 0.2s;
+}
+.sidebar-item:hover { background: rgba(255,255,255,0.07); color: #fff; }
+.sidebar-item.active { background: rgba(201,151,59,0.15); color: var(--gold); }
+.sidebar-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.main { flex: 1; overflow-x: hidden; background: var(--ivory); }
+.page { display: none; padding: 36px; animation: fadeIn 0.3s ease; }
+.page.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* TYPOGRAPHY */
+.page-title { font-family: 'Cormorant Garamond', serif; font-size: 30px; font-weight: 600; margin-bottom: 4px; color: var(--navy); letter-spacing: -0.3px; }
+.page-sub { color: var(--muted); font-size: 13px; margin-bottom: 28px; }
+
+/* CARDS */
+.card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 22px; box-shadow: 0 1px 4px rgba(14,26,46,0.06); margin-bottom: 18px; }
+.card-title { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 10px; margin-bottom: 14px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; }
+.card-title-serif { font-family: 'Cormorant Garamond', serif; font-size: 20px; font-weight: 600; color: var(--navy); margin-bottom: 14px; }
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
+
+/* BUTTONS */
+.btn {
+  padding: 9px 20px; border-radius: 6px; border: none; font-family: 'Inter', sans-serif;
+  font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+.btn-outline { background: none; border: 1.5px solid var(--border); color: var(--text); }
+.btn-outline:hover:not(:disabled) { border-color: var(--navy); color: var(--navy); }
+.btn-primary { background: var(--navy); color: #fff; border: 1.5px solid var(--navy); }
+.btn-primary:hover:not(:disabled) { background: var(--navy-light); transform: translateY(-1px); box-shadow: 0 4px 14px rgba(14,26,46,0.25); }
+.btn-green { background: var(--green-accent); color: #fff; border: none; }
+.btn-green:hover:not(:disabled) { opacity: 0.9; }
+.btn-red { background: var(--red-accent); color: #fff; border: none; }
+.btn-red:hover:not(:disabled) { opacity: 0.9; }
+.btn-row { display: flex; gap: 10px; }
+
+/* TAGS */
+.ai-tag { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 3px; font-weight: 500; margin: 2px; letter-spacing: 0.2px; }
+.tag-blue   { background: rgba(46,95,163,0.1);   color: #2e5fa3; border: 1px solid rgba(46,95,163,0.25); }
+.tag-navy   { background: rgba(14,26,46,0.08);   color: var(--navy); border: 1px solid rgba(14,26,46,0.2); }
+.tag-green  { background: rgba(45,122,79,0.1);   color: var(--green-accent); border: 1px solid rgba(45,122,79,0.25); }
+.tag-gold   { background: rgba(201,151,59,0.12); color: var(--gold); border: 1px solid rgba(201,151,59,0.3); }
+
+/* STATUS BADGES */
+.status-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11.5px; font-weight: 500; padding: 3px 10px; border-radius: 3px; }
+.status-pending   { background: rgba(201,151,59,0.12); color: #a0762a; border: 1px solid rgba(201,151,59,0.3); }
+.status-routed    { background: rgba(46,95,163,0.1);  color: #2e5fa3; border: 1px solid rgba(46,95,163,0.25); }
+.status-rerouted  { background: rgba(14,26,46,0.08);  color: var(--navy); border: 1px solid rgba(14,26,46,0.2); }
+.status-escalated { background: rgba(185,64,64,0.1);  color: var(--red-accent); border: 1px solid rgba(185,64,64,0.25); }
+.status-resolved  { background: rgba(45,122,79,0.1);  color: var(--green-accent); border: 1px solid rgba(45,122,79,0.25); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* STAT CARDS */
+.stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 20px 22px; box-shadow: 0 1px 4px rgba(14,26,46,0.06); }
+.stat-num { font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 700; line-height: 1; color: var(--navy); }
+.stat-label { font-size: 12px; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+.stat-change { font-size: 12px; margin-top: 8px; }
+.up   { color: var(--green-accent); }
+.down { color: var(--red-accent); }
+
+/* SCORE BARS */
+.score-bar-wrap { margin: 10px 0; }
+.score-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
+.score-bar-bg { background: var(--ivory-mid); border-radius: 999px; height: 6px; overflow: hidden; }
+.score-bar-fill { height: 100%; border-radius: 999px; transition: width 1s ease; }
+.fill-navy  { background: linear-gradient(90deg, var(--navy), #3a5f9e); }
+.fill-gold  { background: linear-gradient(90deg, var(--gold), #e0b965); }
+.fill-green { background: linear-gradient(90deg, var(--green-accent), #4a9e6b); }
+
+/* FACULTY CARDS */
+.faculty-card {
+  background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
+  padding: 22px; transition: all 0.2s; box-shadow: 0 1px 4px rgba(14,26,46,0.06); margin-bottom: 16px;
+}
+.faculty-card:hover { border-color: rgba(14,26,46,0.3); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(14,26,46,0.1); }
+.faculty-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.faculty-header-left { display: flex; align-items: center; gap: 14px; }
+.faculty-avatar {
+  width: 44px; height: 44px; border-radius: 8px; display: flex; align-items: center;
+  justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; letter-spacing: 0.5px;
+}
+.avatar-navy  { background: var(--navy); color: #fff; }
+.avatar-gold  { background: var(--gold); color: var(--navy); }
+.avatar-muted { background: var(--ivory-mid); color: var(--muted); border: 1px solid var(--border); }
+.faculty-name { font-weight: 600; font-size: 16px; color: var(--navy); font-family: 'Cormorant Garamond', serif; }
+.faculty-dept { color: var(--muted); font-size: 12px; margin-top: 2px; }
+.match-score-badge { background: var(--navy); color: #fff; padding: 5px 12px; border-radius: 5px; font-size: 13px; font-weight: 600; font-family: 'Cormorant Garamond', serif; }
+.faculty-bio { color: var(--muted); font-size: 13px; line-height: 1.6; margin-bottom: 14px; }
+.faculty-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+.faculty-reason {
+  font-size: 13px; color: var(--muted); background: var(--ivory-dark); border-radius: 6px;
+  padding: 10px 12px; margin: 12px 0; font-style: italic; font-family: 'Cormorant Garamond', serif;
+  font-size: 14.5px; line-height: 1.5;
+}
+
+/* QUERY HERO */
+.query-hero { max-width: 720px; margin: 32px auto 0; text-align: center; }
+.hero-eyebrow { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); margin-bottom: 14px; }
+.hero-title { font-family: 'Cormorant Garamond', serif; font-size: 46px; font-weight: 600; line-height: 1.1; margin-bottom: 12px; color: var(--navy); letter-spacing: -0.5px; }
+.hero-sub { color: var(--muted); font-size: 15px; margin-bottom: 32px; font-style: italic; }
+.query-box { background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; padding: 22px; transition: border-color 0.2s; text-align: left; box-shadow: 0 2px 12px rgba(14,26,46,0.08); }
+.query-box:focus-within { border-color: var(--gold); }
+.query-textarea { width: 100%; background: none; border: none; outline: none; color: var(--text); font-family: 'Inter', sans-serif; font-size: 14px; resize: none; height: 90px; line-height: 1.6; }
+.query-textarea::placeholder { color: var(--muted); }
+.query-controls { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+.select-row { display: flex; gap: 10px; }
+.styled-select { background: var(--ivory-dark); border: 1px solid var(--border); color: var(--text); padding: 7px 12px; border-radius: 6px; font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 500; outline: none; cursor: pointer; }
+.styled-select:focus { border-color: var(--navy); }
+.refine-preview { display: none; margin-top: 20px; background: rgba(201,151,59,0.06); border: 1.5px solid rgba(201,151,59,0.3); border-radius: 10px; padding: 20px; text-align: left; }
+.refine-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.2px; color: var(--gold); font-weight: 700; margin-bottom: 8px; }
+.refine-text { font-family: 'Cormorant Garamond', serif; font-size: 17px; color: var(--text); font-style: italic; }
+
+/* HOME FEATURES */
+.home-feature-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 720px; margin: 28px auto 0; }
+.feature-card { background: var(--navy); border-radius: 8px; padding: 20px; text-align: left; color: rgba(255,255,255,0.7); }
+.feature-icon { font-size: 20px; color: var(--gold); margin-bottom: 10px; }
+.feature-card-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 600; color: #fff; margin-bottom: 6px; }
+.feature-card-sub { font-size: 12.5px; line-height: 1.5; }
+
+/* AI SUGGESTIONS */
+.suggestion-item { display: flex; align-items: flex-start; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; }
+.suggestion-item:last-child { border-bottom: none; }
+.suggestion-icon { color: var(--gold); font-size: 14px; flex-shrink: 0; margin-top: 1px; font-weight: 700; }
+.paper-card { background: var(--ivory-dark); border: 1px solid var(--border); border-radius: 6px; padding: 14px; transition: border-color 0.2s; margin-bottom: 10px; }
+.paper-card:hover { border-color: var(--navy); }
+.paper-title { font-weight: 500; font-size: 13px; margin-bottom: 5px; color: var(--navy); }
+.paper-meta { color: var(--muted); font-size: 12px; }
+
+/* TRACKER */
+.tracker-item { background: var(--card-bg); border: 1px solid var(--border); border-left: 3px solid var(--muted); border-radius: 8px; padding: 18px; margin-bottom: 14px; }
+.tracker-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.tracker-id { font-weight: 600; font-size: 13px; color: var(--navy); }
+.tracker-faculty { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.tracker-query { font-family: 'Cormorant Garamond', serif; font-size: 15px; line-height: 1.5; color: var(--text); font-style: italic; margin-bottom: 8px; }
+.tracker-time { font-size: 11px; color: var(--muted); }
+.tracker-response { background: rgba(45,122,79,0.05); border: 1px solid rgba(45,122,79,0.2); border-radius: 6px; padding: 10px 12px; margin-top: 10px; font-size: 13px; color: var(--text); }
+
+/* TIMELINE */
+.timeline { display: flex; align-items: center; margin: 18px 0; overflow-x: auto; padding-bottom: 4px; }
+.tl-step { display: flex; flex-direction: column; align-items: center; min-width: 110px; }
+.tl-node { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; border: 2px solid var(--border); background: var(--ivory-mid); position: relative; z-index: 1; font-weight: 600; }
+.tl-node.done    { border-color: var(--green-accent); background: rgba(45,122,79,0.1); color: var(--green-accent); }
+.tl-node.fail    { border-color: var(--red-accent);   background: rgba(185,64,64,0.1); color: var(--red-accent); }
+.tl-node.warn    { border-color: var(--gold);          background: rgba(201,151,59,0.1); color: var(--gold); }
+.tl-node.current { border-color: var(--navy);          background: rgba(14,26,46,0.08); color: var(--navy); animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(14,26,46,0.3); } 50% { box-shadow: 0 0 0 8px rgba(14,26,46,0); } }
+.tl-label { font-size: 11px; color: var(--muted); margin-top: 7px; text-align: center; }
+.tl-connector { height: 2px; flex: 1; background: var(--border); margin-top: -20px; }
+.tl-connector.done { background: var(--green-accent); }
+
+/* INBOX (FACULTY) */
+.inbox-item { background: var(--card-bg); border: 1px solid var(--border); border-left: 3px solid var(--border); border-radius: 8px; padding: 20px; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(14,26,46,0.05); }
+.inbox-item.new { border-left: 3px solid var(--navy); }
+.inbox-item.escalated-item { border-left: 3px solid var(--red-accent); }
+.inbox-meta { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.inbox-from { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.inbox-query { font-size: 15px; margin-bottom: 12px; font-family: 'Cormorant Garamond', serif; font-style: italic; line-height: 1.5; background: var(--ivory-dark); border-radius: 6px; padding: 12px 14px; }
+.feedback-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+.response-area { width: 100%; background: var(--ivory-dark); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: 'Inter', sans-serif; font-size: 13px; padding: 10px 12px; resize: none; outline: none; height: 75px; margin-bottom: 4px; }
+.response-area:focus { border-color: var(--navy); }
+
+/* REROUTING */
+.reroute-flow { display: flex; flex-direction: column; gap: 14px; }
+.reroute-step { display: flex; align-items: center; gap: 16px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px 20px; box-shadow: 0 1px 4px rgba(14,26,46,0.05); }
+.reroute-step.fail    { border-color: rgba(185,64,64,0.35); }
+.reroute-step.success { border-color: rgba(45,122,79,0.35); background: rgba(45,122,79,0.03); }
+.reroute-step.warn    { border-color: rgba(201,151,59,0.35); }
+.reroute-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; flex-shrink: 0; }
+.rn-red   { background: rgba(185,64,64,0.12); color: var(--red-accent); }
+.rn-gold  { background: rgba(201,151,59,0.12); color: var(--gold); }
+.rn-green { background: rgba(45,122,79,0.12); color: var(--green-accent); }
+.reroute-content { flex: 1; }
+.reroute-name { font-weight: 600; font-size: 14px; color: var(--navy); }
+.reroute-detail { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.reroute-result { font-size: 18px; font-weight: 700; }
+
+/* RLFF EVENTS */
+.rlff-event { border-radius: 6px; padding: 12px 14px; border: 1px solid transparent; margin-bottom: 10px; }
+.event-navy  { background: var(--ivory-dark); border-color: var(--border); }
+.event-green { background: rgba(45,122,79,0.05); border-color: rgba(45,122,79,0.2); }
+.event-info  { background: rgba(201,151,59,0.06); border-color: rgba(201,151,59,0.25); }
+.rlff-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 5px; }
+.label-navy  { color: var(--navy); }
+.label-green { color: var(--green-accent); }
+
+/* MINI BAR CHART */
+.mini-bar-chart { display: flex; align-items: flex-end; gap: 6px; height: 60px; }
+.mini-bar { flex: 1; border-radius: 3px 3px 0 0; background: rgba(14,26,46,0.12); transition: background 0.2s; min-width: 20px; }
+.mini-bar:hover { background: var(--navy); }
+.mini-bar.highlight { background: var(--gold); }
+
+/* FORMULA PRE */
+.formula-pre { font-family: 'Courier New', monospace; font-size: 11px; background: var(--ivory-dark); padding: 10px 12px; border-radius: 6px; color: var(--navy); line-height: 1.8; }
+
+/* TOAST */
+.toast-area { position: fixed; bottom: 24px; right: 24px; z-index: 1000; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.toast { background: var(--navy); border: 1px solid var(--navy-light); border-left: 3px solid var(--gold); border-radius: 6px; padding: 12px 18px; font-size: 13px; color: #fff; animation: slideIn 0.3s ease forwards; max-width: 300px; pointer-events: all; }
+@keyframes slideIn { from { opacity: 0; transform: translateX(30px); } to { opacity: 1; transform: translateX(0); } }
+
+/* LOADING OVERLAY */
+.loading-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(14,26,46,0.7);
+  z-index: 9999; align-items: center; justify-content: center; flex-direction: column; gap: 16px;
+}
+.loading-overlay.active { display: flex; }
+.loading-spinner {
+  width: 48px; height: 48px; border: 3px solid rgba(255,255,255,0.2);
+  border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-text { color: rgba(255,255,255,0.8); font-size: 14px; letter-spacing: 0.5px; }
+
+/* MODAL */
+.modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(14,26,46,0.6); z-index: 500; align-items: center; justify-content: center; }
+.modal-backdrop.active { display: flex; }
+.modal { background: var(--surface); border-radius: 12px; padding: 36px; width: 100%; max-width: 440px; box-shadow: 0 20px 60px rgba(14,26,46,0.3); }
+.modal-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 600; color: var(--navy); margin-bottom: 6px; }
+.modal-sub { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+.modal-close { float: right; background: none; border: none; cursor: pointer; color: var(--muted); font-size: 20px; line-height: 1; }
+.modal-close:hover { color: var(--navy); }
+.modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border); }
+
+/* EMPTY STATE */
+.empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
+.empty-state-icon { font-size: 40px; margin-bottom: 16px; }
+.empty-state-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--navy); margin-bottom: 8px; }
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
+::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+
+/* PHASE INDICATOR */
+.phase-indicator { display:flex; align-items:center; gap:0; margin-bottom:22px; justify-content:center; }
+.phase-step { display:flex; align-items:center; gap:7px; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.8px; color:rgba(14,26,46,0.35); padding:6px 14px; border-radius:20px; transition:all 0.25s; }
+.phase-step.active { color:var(--navy); background:rgba(201,151,59,0.12); }
+.phase-step.done   { color:var(--green-accent); }
+.phase-num { width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; background:rgba(14,26,46,0.1); flex-shrink:0; }
+.phase-step.active .phase-num { background:var(--gold); color:var(--navy); }
+.phase-step.done   .phase-num { background:var(--green-accent); color:#fff; }
+.phase-connector { flex:0 0 28px; height:2px; background:var(--border); }
+.phase-connector.done { background:var(--green-accent); }
+
+/* CHAT UI */
+.chat-layout { display:grid; grid-template-columns:1fr 280px; gap:18px; }
+.chat-messages-wrap { background:var(--surface); border:1px solid var(--border); border-radius:10px; display:flex; flex-direction:column; height:400px; }
+.chat-messages { flex:1; overflow-y:auto; padding:18px; display:flex; flex-direction:column; gap:10px; }
+.chat-msg { max-width:82%; display:flex; flex-direction:column; gap:3px; }
+.chat-msg.user  { align-self:flex-end;  align-items:flex-end; }
+.chat-msg.ai    { align-self:flex-start; align-items:flex-start; }
+.chat-bubble { padding:10px 14px; border-radius:12px; font-size:13.5px; line-height:1.6; }
+.chat-msg.user .chat-bubble { background:var(--navy); color:#fff; border-radius:12px 12px 2px 12px; }
+.chat-msg.ai   .chat-bubble { background:var(--ivory-dark); color:var(--text); border:1px solid var(--border); border-radius:12px 12px 12px 2px; }
+.chat-msg-time { font-size:10px; color:var(--muted); }
+.chat-thinking .chat-bubble { color:var(--muted); font-style:italic; }
+.chat-input-wrap { border-top:1px solid var(--border); padding:12px 14px; display:flex; gap:8px; align-items:flex-end; }
+.chat-input { flex:1; background:var(--ivory-dark); border:1.5px solid var(--border); border-radius:8px; padding:9px 12px; font-family:'Inter',sans-serif; font-size:13px; color:var(--text); resize:none; outline:none; min-height:40px; max-height:110px; line-height:1.5; }
+.chat-input:focus { border-color:var(--navy); }
+.chat-input::placeholder { color:var(--muted); }
+.confirm-bar { border-top:1px solid rgba(201,151,59,0.3); padding:12px 14px; background:rgba(201,151,59,0.05); display:none; flex-direction:column; gap:6px; }
+.confirm-bar-hint { font-size:12px; color:var(--muted); }
+
+/* PAPERS SIDEBAR */
+.chat-papers-card { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:14px; height:400px; overflow-y:auto; }
+.chat-papers-title { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--gold); margin-bottom:10px; }
+.mini-paper { padding:9px 10px; border:1px solid var(--border); border-radius:6px; margin-bottom:8px; background:var(--ivory-dark); }
+.mini-paper:hover { border-color:var(--navy); }
+.mini-paper-title { font-size:11.5px; font-weight:500; color:var(--navy); margin-bottom:3px; line-height:1.4; }
+.mini-paper-meta { font-size:10.5px; color:var(--muted); }
+
+/* CONFIRM CARD */
+.confirm-card { background:rgba(201,151,59,0.06); border:1.5px solid rgba(201,151,59,0.3); border-radius:10px; padding:22px; margin-bottom:20px; }
+.confirm-label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--gold); margin-bottom:10px; }
+.confirm-query { font-family:'Cormorant Garamond',serif; font-size:20px; color:var(--text); font-style:italic; line-height:1.4; margin-bottom:12px; }
+.confirm-meta { display:flex; gap:8px; flex-wrap:wrap; }
+
+/* CHAT REQUEST CARDS */
+.req-card { background:var(--card-bg); border:1px solid var(--border); border-radius:8px; padding:16px; margin-bottom:10px; }
+.req-card.req-pending  { border-left:3px solid var(--gold); }
+.req-card.req-accepted { border-left:3px solid var(--green-accent); }
+.req-card.req-declined { border-left:3px solid var(--red-accent); opacity:0.7; }
+.req-card.req-expired  { border-left:3px solid var(--muted); opacity:0.6; }
+.req-timer { font-size:12px; color:var(--gold); font-weight:600; }
+
+/* SESSION THREAD */
+.session-card { background:var(--card-bg); border:1px solid var(--border); border-radius:8px; margin-bottom:12px; overflow:hidden; }
+.session-header { display:flex; justify-content:space-between; align-items:center; padding:13px 16px; background:var(--navy); color:#fff; cursor:pointer; }
+.session-header-info .session-header-title { font-weight:600; font-size:14px; }
+.session-header-info .session-header-sub { font-size:11.5px; color:rgba(255,255,255,0.6); margin-top:2px; }
+.session-body { display:none; }
+.session-body.open { display:block; }
+.session-messages { height:260px; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:8px; background:var(--ivory); }
+.session-msg { max-width:76%; }
+.session-msg.mine    { align-self:flex-end; }
+.session-msg.theirs  { align-self:flex-start; }
+.session-msg.sysmsg  { align-self:center; max-width:92%; }
+.session-bubble { padding:8px 12px; border-radius:10px; font-size:13px; line-height:1.5; }
+.session-msg.mine   .session-bubble { background:var(--navy); color:#fff; border-radius:10px 10px 2px 10px; }
+.session-msg.theirs .session-bubble { background:var(--surface); border:1px solid var(--border); border-radius:10px 10px 10px 2px; }
+.session-msg.sysmsg .session-bubble { background:rgba(14,26,46,0.05); border:1px solid var(--border); border-radius:6px; color:var(--muted); font-size:11.5px; font-style:italic; text-align:center; }
+.session-msg-name { font-size:10px; color:var(--muted); margin-bottom:2px; font-weight:600; text-transform:uppercase; letter-spacing:0.4px; }
+.session-input-row { display:flex; gap:8px; padding:10px 14px; border-top:1px solid var(--border); background:var(--surface); }
+.session-input { flex:1; border:1.5px solid var(--border); border-radius:6px; padding:8px 11px; font-family:'Inter',sans-serif; font-size:13px; background:var(--ivory-dark); color:var(--text); outline:none; }
+.session-input:focus { border-color:var(--navy); }
+
+@media (max-width: 860px) {
+  .login-wrapper { flex-direction: column; }
+  .login-left { width: 100%; padding: 36px 32px; }
+  .login-brand { font-size: 52px; }
+  .login-feature-cards { display: none; }
+  .login-form-wrap { padding: 40px 28px; }
+  .app-layout { flex-direction: column; }
+  .sidebar { width: 100%; }
+  .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  .chat-layout { grid-template-columns: 1fr; }
+  .chat-papers-card { height: 200px; }
+  .query-controls { flex-direction: column; gap: 12px; align-items: flex-start; }
+}
+</style>
+
+<style>
+/* ═══════════════════════════════════════════════
+   LANGUAGE SELECTOR
+═══════════════════════════════════════════════ */
+.lang-selector-wrap { position: relative; display:inline-block; }
+.lang-btn {
+  display: flex; align-items: center; gap: 6px;
+  background: none; border: 1px solid rgba(255,255,255,0.22);
+  padding: 6px 12px; border-radius: 6px;
+  font-size: 12px; color: rgba(255,255,255,0.75);
+  cursor: pointer; transition: all 0.2s; font-family: 'Inter', sans-serif;
+}
+.lang-btn:hover { background: rgba(255,255,255,0.1); color:#fff; border-color:rgba(255,255,255,0.45); }
+.lang-chevron { font-size:9px; opacity:0.6; transition:transform 0.2s; display:inline-block; }
+.lang-btn.open .lang-chevron { transform:rotate(180deg); }
+.lang-dropdown {
+  display:none; position:absolute; top:calc(100% + 8px); right:0;
+  background:#fff; border:1px solid var(--border);
+  border-radius:8px; box-shadow:0 8px 28px rgba(14,26,46,0.18);
+  min-width:170px; z-index:9999; overflow:hidden;
+}
+.lang-dropdown.open { display:block; animation:fadeIn 0.15s ease; }
+.lang-option {
+  display:flex; align-items:center; gap:10px; padding:10px 14px;
+  cursor:pointer; font-size:13px; color:var(--navy); transition:background 0.15s;
+  border:none; background:none; width:100%; font-family:'Inter',sans-serif; text-align:left;
+}
+.lang-option:hover { background:var(--ivory-dark); }
+.lang-option.active { background:rgba(201,151,59,0.12); color:var(--gold); font-weight:600; }
+.lang-flag { font-size:18px; line-height:1; }
+.lang-check { color:var(--gold); font-size:12px; margin-left:auto; }
+/* Login page lang button */
+.login-lang-btn {
+  border-color:rgba(14,26,46,0.22); color:var(--muted);
+  background:rgba(255,255,255,0.8);
+}
+.login-lang-btn:hover { background:#fff; color:var(--navy); border-color:var(--navy); }
+/* Loading overlay for translation */
+.lang-loading-bar {
+  position:fixed; top:0; left:0; width:0%; height:3px;
+  background:var(--gold); z-index:99999; transition:width 0.4s ease;
+}
+</style>
+</head>
+<body>
+
+<!-- Language loading bar -->
+<div class="lang-loading-bar" id="langLoadingBar"></div>
+
+<!-- LOADING OVERLAY -->
+<div id="loadingOverlay" class="loading-overlay">
+  <div class="loading-spinner"></div>
+  <div id="loadingText" class="loading-text" data-i18n="processingQuery">Processing your query…</div>
+</div>
+
+<!-- REGISTER MODAL -->
+<div id="registerModal" class="modal-backdrop">
+  <div class="modal">
+    <button class="modal-close" onclick="closeRegister()">✕</button>
+    <div class="modal-title" data-i18n="createAccount">Create Account</div>
+    <div class="modal-sub" data-i18n="registerSub">Register with your institutional credentials.</div>
+    <div class="form-body">
+      <div class="field-group">
+        <label data-i18n="fullName">Full Name</label>
+        <input type="text" id="reg-name" data-i18n-placeholder="yourFullName" placeholder="Your full name" />
+      </div>
+      <div class="field-group">
+        <label data-i18n="institutionalEmail">Institutional Email</label>
+        <input type="email" id="reg-email" placeholder="name@university.edu" />
+      </div>
+      <div class="field-group">
+        <label data-i18n="password">Password</label>
+        <input type="password" id="reg-password" placeholder="••••••••" />
+      </div>
+      <div class="field-group">
+        <label data-i18n="role">Role</label>
+        <select class="styled-select" id="reg-role" style="width:100%; padding:13px 16px; background:var(--surface); border: 1.5px solid var(--border);">
+          <option value="student" data-i18n="student">Student</option>
+          <option value="faculty" data-i18n="facultyOption">Faculty (must have registered email)</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeRegister()" data-i18n="cancel">Cancel</button>
+      <button class="btn btn-primary" onclick="doRegister()" data-i18n="createAccountBtn">Create Account →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════ LOGIN VIEW ═══════════════════ -->
+<div id="loginView" class="view active">
+  <!-- Language selector top-right on login -->
+  <div style="position:absolute;top:18px;right:20px;z-index:200;">
+    <div class="lang-selector-wrap">
+      <button class="lang-btn login-lang-btn" onclick="toggleLang(this)">
+        🌐 <span class="lang-current-label">English</span> <span class="lang-chevron">▼</span>
+      </button>
+      <div class="lang-dropdown" id="loginLangDrop">
+        <button class="lang-option active" onclick="setLang('en',this)"><span class="lang-flag">🇬🇧</span><span>English</span><span class="lang-check">✓</span></button>
+        <button class="lang-option" onclick="setLang('hi',this)"><span class="lang-flag">🇮🇳</span><span>हिन्दी</span><span class="lang-check" style="display:none">✓</span></button>
+        <button class="lang-option" onclick="setLang('es',this)"><span class="lang-flag">🇪🇸</span><span>Español</span><span class="lang-flag" style="display:none">✓</span><span class="lang-check" style="display:none">✓</span></button>
+        <button class="lang-option" onclick="setLang('fr',this)"><span class="lang-flag">🇫🇷</span><span>Français</span><span class="lang-check" style="display:none">✓</span></button>
+        <button class="lang-option" onclick="setLang('zh',this)"><span class="lang-flag">🇨🇳</span><span>中文</span><span class="lang-check" style="display:none">✓</span></button>
+      </div>
+    </div>
+  </div>
+
+  <div class="login-wrapper">
+    <section class="login-left">
+      <div class="login-left-inner">
+        <div class="login-eyebrow" data-i18n="archiveTagline">Archive of Modern Thought</div>
+        <h1 class="login-brand">Scholar<br><span>Connect</span></h1>
+        <p class="login-tagline" data-i18n="heroTagline">A curated symposium for the modern academic — where rigorous research meets elegant digital architecture and AI-powered faculty routing.</p>
+        <div class="login-feature-cards">
+          <div class="login-lcard">
+            <span class="login-lcard-icon">▣</span>
+            <h3 data-i18n="feat1Title">Deep Archive</h3>
+            <p data-i18n="feat1Desc">Access millions of peer-reviewed documents via arXiv integration.</p>
+          </div>
+          <div class="login-lcard">
+            <span class="login-lcard-icon">◈</span>
+            <h3 data-i18n="feat2Title">Global Symposium</h3>
+            <p data-i18n="feat2Desc">Connect with leading researchers through AI-powered matching.</p>
+          </div>
+          <div class="login-lcard">
+            <span class="login-lcard-icon">⬡</span>
+            <h3 data-i18n="feat3Title">AI Matching</h3>
+            <p data-i18n="feat3Desc">Semantic query routing with RLFF — learns from every faculty interaction.</p>
+          </div>
+          <div class="login-lcard">
+            <span class="login-lcard-icon">◎</span>
+            <h3 data-i18n="feat4Title">Live Tracking</h3>
+            <p data-i18n="feat4Desc">Real-time query status with automatic rerouting and escalation.</p>
+          </div>
+        </div>
+        <div class="login-est">
+          <span class="login-est-line"></span>
+          <span data-i18n="estLabel">EST. 2026 · Scholar Connect</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="login-right">
+      <div class="login-form-wrap">
+        <div class="login-form-header">
+          <h2 data-i18n="welcomeBack">Welcome Back</h2>
+          <p data-i18n="loginSubtitle">Please enter your institutional credentials to continue.</p>
+        </div>
+
+        <div class="form-body">
+          <div class="field-group">
+            <label for="login-email" data-i18n="institutionalId">Institutional ID</label>
+            <input type="email" id="login-email" placeholder="name@university.edu" autocomplete="email" />
+          </div>
+          <div class="field-group">
+            <div class="label-row">
+              <label for="login-password" data-i18n="password">Password</label>
+            </div>
+            <div class="password-wrapper">
+              <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" />
+              <button class="toggle-pw" data-target="login-password" type="button" aria-label="Toggle visibility">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="demo-creds">
+            <div class="demo-creds-title" data-i18n="demoCredsTitle">Demo Credentials — all passwords: password123</div>
+            <div class="demo-creds-row">
+              <span>🎓 <span data-i18n="student">Student</span></span>
+              <strong>rahul@student.edu</strong>
+              <button class="demo-fill-btn" onclick="fillCreds('rahul@student.edu','password123')" data-i18n="use">Use</button>
+            </div>
+            <div class="demo-creds-row">
+              <span>🎓 <span data-i18n="student">Student</span></span>
+              <strong>priya@student.edu</strong>
+              <button class="demo-fill-btn" onclick="fillCreds('priya@student.edu','password123')" data-i18n="use">Use</button>
+            </div>
+            <div class="demo-creds-row">
+              <span>👨‍🏫 <span data-i18n="faculty">Faculty</span></span>
+              <strong>sharma@university.edu</strong>
+              <button class="demo-fill-btn" onclick="fillCreds('sharma@university.edu','password123')" data-i18n="use">Use</button>
+            </div>
+            <div class="demo-creds-row">
+              <span>👨‍🏫 <span data-i18n="faculty">Faculty</span></span>
+              <strong>verma@university.edu</strong>
+              <button class="demo-fill-btn" onclick="fillCreds('verma@university.edu','password123')" data-i18n="use">Use</button>
+            </div>
+          </div>
+
+          <p class="role-divider" data-i18n="signInAsRole">Sign in as your role</p>
+
+          <div class="login-btn-row">
+            <button class="btn-role btn-student" id="studentLoginBtn" type="button">
+              <span class="role-icon">🎓</span>
+              <span class="role-label" data-i18n="studentLogin">Student Login</span>
+              <span class="role-sub" data-i18n="queryResearch">Query &amp; Research</span>
+            </button>
+            <button class="btn-role btn-faculty" id="facultyLoginBtn" type="button">
+              <span class="role-icon">👨‍🏫</span>
+              <span class="role-label" data-i18n="facultyLogin">Faculty Login</span>
+              <span class="role-sub" data-i18n="panelResponses">Panel &amp; Responses</span>
+            </button>
+          </div>
+        </div>
+
+        <footer class="login-footer">
+          <p>© 2026 Scholar Connect.<br><small data-i18n="archiveTagline">AN ARCHIVE OF MODERN THOUGHT.</small></p>
+          <nav class="footer-links">
+            <a onclick="openRegister()" data-i18n="newRegister">New? Register</a>
+            <a onclick="fireToast('Contact your institution for access.')" data-i18n="institutionalAccess">Institutional Access</a>
+          </nav>
+        </footer>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- ═══════════════════ STUDENT VIEW ═══════════════════ -->
+<div id="studentView" class="view">
+  <nav class="navbar">
+    <div class="logo">Scholar <span>Connect</span></div>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="studentNav('home', this)" data-i18n="navHome">Home</button>
+      <button class="nav-link" onclick="studentNav('ai', this)" data-i18n="navAI">AI Suggestions</button>
+      <button class="nav-link" onclick="studentNav('faculty', this)" data-i18n="navFacultyMatch">Faculty Match</button>
+      <button class="nav-link" id="trackerNavBtn" onclick="studentNav('tracker', this)"><span data-i18n="navQueryTracker">Query Tracker</span> <span class="nav-badge" id="trackerBadge">0</span></button>
+      <button class="nav-link" onclick="studentNav('reroute', this)" data-i18n="navRerouting">Rerouting</button>
+      <button class="nav-link" id="studentChatNavBtn" onclick="studentNav('activechat', this)"><span data-i18n="navActiveChats">Active Chats</span> <span class="nav-badge" id="chatReqBadge" style="display:none">0</span></button>
+    </div>
+    <div class="navbar-right">
+      <div class="lang-selector-wrap">
+        <button class="lang-btn" onclick="toggleLang(this)">
+          🌐 <span class="lang-current-label">English</span> <span class="lang-chevron">▼</span>
+        </button>
+        <div class="lang-dropdown">
+          <button class="lang-option active" onclick="setLang('en',this)"><span class="lang-flag">🇬🇧</span><span>English</span><span class="lang-check">✓</span></button>
+          <button class="lang-option" onclick="setLang('hi',this)"><span class="lang-flag">🇮🇳</span><span>हिन्दी</span><span class="lang-check" style="display:none">✓</span></button>
+          <button class="lang-option" onclick="setLang('es',this)"><span class="lang-flag">🇪🇸</span><span>Español</span><span class="lang-check" style="display:none">✓</span></button>
+          <button class="lang-option" onclick="setLang('fr',this)"><span class="lang-flag">🇫🇷</span><span>Français</span><span class="lang-check" style="display:none">✓</span></button>
+          <button class="lang-option" onclick="setLang('zh',this)"><span class="lang-flag">🇨🇳</span><span>中文</span><span class="lang-check" style="display:none">✓</span></button>
+        </div>
+      </div>
+      <span class="user-pill student-pill" id="studentUserPill">🎓 <span data-i18n="student">Student</span></span>
+      <button class="logout-btn" onclick="doLogout()" data-i18n="logout">Logout</button>
+    </div>
+  </nav>
+
+  <div class="app-layout">
+    <aside class="sidebar" id="studentSidebar">
+      <div class="sidebar-section" data-i18n="sideNavigation">Navigation</div>
+      <div class="sidebar-item active" onclick="studentNav('home', null, this)"><div class="sidebar-dot"></div> <span data-i18n="navHome">Home</span></div>
+      <div class="sidebar-item" onclick="studentNav('ai', null, this)"><div class="sidebar-dot"></div> <span data-i18n="navAI">AI Suggestions</span></div>
+      <div class="sidebar-item" onclick="studentNav('faculty', null, this)"><div class="sidebar-dot"></div> <span data-i18n="navFacultyMatch">Faculty Match</span></div>
+      <div class="sidebar-section" data-i18n="sideMonitoring">Monitoring</div>
+      <div class="sidebar-item" onclick="studentNav('tracker', null, this)"><div class="sidebar-dot"></div> <span data-i18n="navQueryTracker">Query Tracker</span></div>
+      <div class="sidebar-item" onclick="studentNav('reroute', null, this)"><div class="sidebar-dot"></div> <span data-i18n="navReroutingView">Rerouting View</span></div>
+      <div class="sidebar-section" data-i18n="sideChat">Chat</div>
+      <div class="sidebar-item" onclick="studentNav('activechat', null, this)"><div class="sidebar-dot"></div> <span data-i18n="navActiveChats">Active Chats</span> <span id="chatReqBadgeSide" style="display:none;background:var(--gold);color:var(--navy);border-radius:999px;font-size:10px;padding:1px 6px;margin-left:4px;font-weight:700;"></span></div>
+    </aside>
+
+    <main class="main">
+
+      <!-- PAGE: HOME -->
+      <div id="student-home" class="page active">
+        <div style="max-width:960px;margin:0 auto;">
+          <div class="hero-eyebrow" style="text-align:center" data-i18n="aiResearchAssistant">AI Research Assistant</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:600;color:var(--navy);margin-bottom:4px;text-align:center;" data-i18n="findRightMentor">Find the Right Faculty Mentor</div>
+          <div style="color:var(--muted);font-size:13px;margin-bottom:20px;text-align:center;" data-i18n="homeSubtitle">Chat with the AI about your research. When your query is clear, confirm and get faculty recommendations.</div>
+
+          <div class="phase-indicator">
+            <div class="phase-step active" id="pstep1"><div class="phase-num">1</div> <span data-i18n="phaseDiscuss">Discuss</span></div>
+            <div class="phase-connector" id="pcon1"></div>
+            <div class="phase-step" id="pstep2"><div class="phase-num">2</div> <span data-i18n="phaseConfirm">Confirm</span></div>
+            <div class="phase-connector" id="pcon2"></div>
+            <div class="phase-step" id="pstep3"><div class="phase-num">3</div> <span data-i18n="phaseMatch">Match</span></div>
+          </div>
+
+          <div id="homePhase1">
+            <div class="chat-layout">
+              <div class="chat-messages-wrap">
+                <div class="chat-messages" id="chatMessages">
+                  <div class="chat-msg ai">
+                    <div class="chat-bubble" data-i18n="aiGreeting">Hello! Tell me about your research interest or the topic you need faculty guidance on. I'll help refine your query and find the best mentor for you.</div>
+                  </div>
+                </div>
+                <div class="confirm-bar" id="confirmBar">
+                  <div class="confirm-bar-hint" data-i18n="confirmBarHint">Your query looks specific enough. Confirm it or keep refining.</div>
+                  <div><button class="btn btn-primary" onclick="confirmQuery()" data-i18n="confirmQuery">Confirm This Query →</button></div>
+                </div>
+                <div class="chat-input-wrap">
+                  <textarea class="chat-input" id="chatInput" data-i18n-placeholder="chatPlaceholder" placeholder="Describe your research question… (Enter to send)" rows="2"
+                    onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChatMsg();}"></textarea>
+                  <button class="btn btn-primary" onclick="sendChatMsg()" style="height:40px;align-self:flex-end;" data-i18n="send">Send</button>
+                </div>
+              </div>
+              <div class="chat-papers-card">
+                <div class="chat-papers-title" data-i18n="researchPapers">Research Papers</div>
+                <div id="chatPapersContent" style="color:var(--muted);font-size:12px;line-height:1.6;" data-i18n="papersHint">Relevant arXiv papers will appear as you chat.</div>
+              </div>
+            </div>
+          </div>
+
+          <div id="homePhase2" style="display:none;">
+            <div class="confirm-card" id="confirmCard"></div>
+            <div style="display:flex;justify-content:center;gap:12px;">
+              <button class="btn btn-outline" onclick="backToPhase1()" data-i18n="refineFurther">← Refine Further</button>
+              <button class="btn btn-primary" onclick="findFaculty()" data-i18n="findFacultyMatches">Find Faculty Matches →</button>
+            </div>
+          </div>
+
+          <div id="homePhase3" style="display:none;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+              <div>
+                <div style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--navy);" data-i18n="facultyRecommendations">Faculty Recommendations</div>
+                <div style="font-size:13px;color:var(--muted);" data-i18n="rankedBy">Ranked by semantic match + RLFF domain score</div>
+              </div>
+              <button class="btn btn-outline" onclick="backToPhase2()" data-i18n="back">← Back</button>
+            </div>
+            <div id="homeFacultyMatches"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: AI SUGGESTIONS -->
+      <div id="student-ai" class="page">
+        <div class="page-title" data-i18n="aiAnalysis">AI Analysis</div>
+        <div class="page-sub" data-i18n="aiAnalysisSub">Intelligent breakdown of your query with research directions and arXiv papers</div>
+        <div id="aiContent">
+          <div class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            <div class="empty-state-title" data-i18n="noQueryYet">No Query Submitted Yet</div>
+            <p data-i18n="goToHome">Go to Home and submit a query to see AI analysis.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: FACULTY MATCH -->
+      <div id="student-faculty" class="page">
+        <div class="page-title" data-i18n="facultyMatchResults">Faculty Match Results</div>
+        <div class="page-sub" data-i18n="facultyMatchSub">Ranked by semantic similarity, domain expertise, and RLFF feedback score</div>
+        <div id="facultyMatchContent">
+          <div class="empty-state">
+            <div class="empty-state-icon">👨‍🏫</div>
+            <div class="empty-state-title" data-i18n="noMatchesYet">No Matches Yet</div>
+            <p data-i18n="submitFirst">Submit a query first to see faculty recommendations.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: QUERY TRACKER -->
+      <div id="student-tracker" class="page">
+        <div class="page-title" data-i18n="navQueryTracker">Query Tracker</div>
+        <div class="page-sub" data-i18n="trackerSub">Track the status of your submitted queries and faculty responses.</div>
+        <div id="trackerContent">
+          <div class="empty-state">
+            <div class="empty-state-icon">📋</div>
+            <div class="empty-state-title" data-i18n="loadingQueries">Loading queries…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: REROUTING VIEW (STUDENT) -->
+      <div id="student-reroute" class="page">
+        <div class="page-title" data-i18n="reroutingVis">Rerouting Visualisation</div>
+        <div class="page-sub" data-i18n="reroutingSubStudent">See how the system adapts when queries need rerouting or escalation</div>
+        <div id="studentRerouteContent">
+          <div class="empty-state">
+            <div class="empty-state-icon">🔄</div>
+            <div class="empty-state-title" data-i18n="loadingRerouting">Loading rerouting data…</div>
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top:20px">
+          <div class="card">
+            <div class="card-title" data-i18n="systemLearning">System Learning (RLFF)</div>
+            <div style="font-size:13.5px;color:var(--muted);margin-bottom:14px;line-height:1.6;" data-i18n="rlffExplain">Each feedback action updates faculty ranking weights in real-time through Reinforcement Learning from Faculty Feedback.</div>
+            <div class="rlff-event event-info">
+              <div style="font-size:12px;color:var(--navy);margin-bottom:4px" data-i18n="howItWorks">How It Works</div>
+              <div style="font-size:13px;font-style:italic;font-family:'Cormorant Garamond',serif;" data-i18n="rlffQuote">"Faculty mark queries as relevant or irrelevant. Relevant feedback increases their domain score by +0.03×(1−score). Irrelevant decreases it by −0.07×score."</div>
+            </div>
+            <div class="formula-pre">
+Relevant:   score += 0.03 × (1 − score)<br>
+Irrelevant: score -= 0.07 × score<br>
+Final:      0.55×semantic + 0.45×domain
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-title" data-i18n="escalationLogic">Escalation Logic</div>
+            <div style="font-size:13.5px;color:var(--muted);margin-bottom:14px;line-height:1.6;" data-i18n="escalationExplain">Queries are automatically escalated when they exceed the response timeout or faculty marks them irrelevant.</div>
+            <div class="rlff-event event-navy">
+              <div class="rlff-label label-navy" data-i18n="step1">Step 1 — Initial Routing</div>
+              <div style="font-size:13px" data-i18n="step1Desc">Query assigned to top-ranked faculty</div>
+            </div>
+            <div class="rlff-event event-navy">
+              <div class="rlff-label label-navy" style="color:var(--gold)" data-i18n="step2">Step 2 — Rerouting</div>
+              <div style="font-size:13px" data-i18n="step2Desc">If irrelevant or timeout → next faculty assigned</div>
+            </div>
+            <div class="rlff-event event-navy">
+              <div class="rlff-label" style="color:var(--red-accent)" data-i18n="step3">Step 3 — Escalation</div>
+              <div style="font-size:13px" data-i18n="step3Desc">After 2 failed attempts → escalation_level incremented</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: ACTIVE CHATS (STUDENT) -->
+      <div id="student-activechat" class="page">
+        <div class="page-title" data-i18n="navActiveChats">Active Chats</div>
+        <div class="page-sub" data-i18n="activeChatsSubStudent">Manage your chat requests and live conversations with faculty.</div>
+
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--navy);" data-i18n="chatRequestsTitle">Chat Requests</h3>
+          <button class="btn btn-outline" style="padding:5px 12px;font-size:11px;" onclick="loadStudentChatRequests()" data-i18n="refresh">↻ Refresh</button>
+        </div>
+        <div id="chatRequestsContent">
+          <div class="empty-state"><div class="empty-state-icon">💬</div><div class="empty-state-title" data-i18n="loading">Loading…</div></div>
+        </div>
+
+        <div style="margin-top:28px;margin-bottom:14px;">
+          <h3 style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:var(--navy);" data-i18n="conversations">Conversations</h3>
+        </div>
+        <div id="chatSessionsContent">
+          <div class="empty-state"><div class="empty-state-icon">💬</div><div class="empty-state-title" data-i18n="noConversations">No conversations yet</div><p data-i18n="requestChatHint">Request a chat from faculty match results on the Home page.</p></div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ═══════════════════ FACULTY VIEW ═══════════════════ -->
+<div id="facultyView" class="view">
+  <nav class="navbar">
+    <div class="logo">Scholar <span>Connect</span></div>
+    <div class="nav-links">
+      <button class="nav-link active" onclick="facultyNav('panel', this)" data-i18n="navFacultyPanel">Faculty Panel</button>
+      <button class="nav-link" onclick="facultyNav('chatrequests', this)"><span data-i18n="chatRequestsTitle">Chat Requests</span> <span class="nav-badge" id="incomingReqBadge" style="display:none">0</span></button>
+      <button class="nav-link" onclick="facultyNav('activechat', this)" data-i18n="navActiveChats">Active Chats</button>
+      <button class="nav-link" onclick="facultyNav('stats', this)" data-i18n="navMyStats">My Stats</button>
+      <button class="nav-link" onclick="facultyNav('reroute', this)" data-i18n="navReroutingView">Rerouting View</button>
+    </div>
+    <div class="navbar-right">
+      <div class="lang-selector-wrap">
+        <button class="lang-btn" onclick="toggleLang(this)">
+          🌐 <span class="lang-current-label">English</span> <span class="lang-chevron">▼</span>
+        </button>
+        <div class="lang-dropdown">
+          <button class="lang-option active" onclick="setLang('en',this)"><span class="lang-flag">🇬🇧</span><span>English</span><span class="lang-check">✓</span></button>
+          <button class="lang-option" onclick="setLang('hi',this)"><span class="lang-flag">🇮🇳</span><span>हिन्दी</span><span class="lang-check" style="display:none">✓</span></button>
+          <button class="lang-option" onclick="setLang('es',this)"><span class="lang-flag">🇪🇸</span><span>Español</span><span class="lang-check" style="display:none">✓</span></button>
+          <button class="lang-option" onclick="setLang('fr',this)"><span class="lang-flag">🇫🇷</span><span>Français</span><span class="lang-check" style="display:none">✓</span></button>
+          <button class="lang-option" onclick="setLang('zh',this)"><span class="lang-flag">🇨🇳</span><span>中文</span><span class="lang-check" style="display:none">✓</span></button>
+        </div>
+      </div>
+      <span class="user-pill faculty-pill" id="facultyUserPill">👨‍🏫 <span data-i18n="faculty">Faculty</span></span>
+      <button class="logout-btn" onclick="doLogout()" data-i18n="logout">Logout</button>
+    </div>
+  </nav>
+
+  <div class="app-layout">
+    <aside class="sidebar" id="facultySidebar">
+      <div class="sidebar-section" data-i18n="faculty">Faculty</div>
+      <div class="sidebar-item active" onclick="facultyNav('panel', null, this)"><div class="sidebar-dot"></div> <span data-i18n="navFacultyPanel">Faculty Panel</span></div>
+      <div class="sidebar-item" onclick="facultyNav('stats', null, this)"><div class="sidebar-dot"></div> <span data-i18n="navMyStats">My Stats</span></div>
+      <div class="sidebar-section" data-i18n="sideChat">Chat</div>
+      <div class="sidebar-item" onclick="facultyNav('chatrequests', null, this)"><div class="sidebar-dot"></div> <span data-i18n="chatRequestsTitle">Chat Requests</span> <span id="incomingReqBadgeSide" style="display:none;background:var(--gold);color:var(--navy);border-radius:999px;font-size:10px;padding:1px 6px;margin-left:4px;font-weight:700;"></span></div>
+      <div class="sidebar-item" onclick="facultyNav('activechat', null, this)"><div class="sidebar-dot"></div> <span data-i18n="navActiveChats">Active Chats</span></div>
+      <div class="sidebar-section" data-i18n="tools">Tools</div>
+      <div class="sidebar-item" onclick="facultyNav('reroute', null, this)"><div class="sidebar-dot"></div> <span data-i18n="navReroutingView">Rerouting View</span></div>
+    </aside>
+
+    <main class="main">
+
+      <!-- PAGE: CHAT REQUESTS (FACULTY) -->
+      <div id="faculty-chatrequests" class="page">
+        <div class="page-title" data-i18n="chatRequestsTitle">Chat Requests</div>
+        <div class="page-sub" data-i18n="chatRequestsSub">Students requesting live chat sessions. Accept to open a conversation.</div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
+          <button class="btn btn-outline" style="padding:5px 12px;font-size:11px;" onclick="loadIncomingRequests()" data-i18n="refresh">↻ Refresh</button>
+        </div>
+        <div id="incomingRequestsContent">
+          <div class="empty-state"><div class="empty-state-icon">📨</div><div class="empty-state-title" data-i18n="loadingRequests">Loading requests…</div></div>
+        </div>
+      </div>
+
+      <!-- PAGE: ACTIVE CHATS (FACULTY) -->
+      <div id="faculty-activechat" class="page">
+        <div class="page-title" data-i18n="navActiveChats">Active Chats</div>
+        <div class="page-sub" data-i18n="activeChatsSubFaculty">Your ongoing conversations with students.</div>
+        <div id="facultySessionsContent">
+          <div class="empty-state"><div class="empty-state-icon">💬</div><div class="empty-state-title" data-i18n="noActiveSessions">No active sessions</div><p data-i18n="acceptToStart">Accept chat requests to start conversations.</p></div>
+        </div>
+      </div>
+
+      <!-- PAGE: FACULTY PANEL -->
+      <div id="faculty-panel" class="page active">
+        <div class="page-title" data-i18n="navFacultyPanel">Faculty Panel</div>
+        <div class="page-sub" data-i18n="facultyPanelSub">Review incoming student queries, mark relevance, and respond. Your feedback updates the RLFF matching algorithm.</div>
+
+        <div class="grid-3" style="margin-bottom:22px;">
+          <div class="stat-card">
+            <div class="stat-num" id="fStatNew">—</div>
+            <div class="stat-label" data-i18n="assignedQueries">Assigned Queries</div>
+            <div class="stat-change" id="fStatNewSub" data-i18n="loading">Loading…</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="fStatScore" style="color:var(--green-accent)">—</div>
+            <div class="stat-label" data-i18n="topDomainScore">Top Domain Score</div>
+            <div class="stat-change up" data-i18n="rlffUpdated">↑ RLFF updated</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-num" id="fStatResolved">—</div>
+            <div class="stat-label" data-i18n="resolvedQueries">Resolved Queries</div>
+            <div class="stat-change up" data-i18n="feedbackDriven">↑ Feedback-driven improvement</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px; display:flex; justify-content:space-between; align-items:center;">
+          <h2 style="font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:600; color:var(--navy);" data-i18n="incomingQueries">Incoming Queries</h2>
+          <div style="display:flex;gap:10px;align-items:center;">
+            <span style="font-size:12px; color:var(--muted);" data-i18n="markRelevance">Mark relevance to improve future matching</span>
+            <button class="btn btn-outline" style="padding:6px 14px" onclick="loadFacultyQueries()" data-i18n="refresh">↻ Refresh</button>
+          </div>
+        </div>
+
+        <div id="facultyInboxContent">
+          <div class="empty-state">
+            <div class="empty-state-icon">📬</div>
+            <div class="empty-state-title" data-i18n="loadingQueries">Loading queries…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: MY STATS -->
+      <div id="faculty-stats" class="page">
+        <div class="page-title" data-i18n="statsTitle">My Stats &amp; Performance</div>
+        <div class="page-sub" data-i18n="statsSub">Your RLFF score breakdown and domain expertise ratings.</div>
+        <div id="facultyStatsContent">
+          <div class="empty-state">
+            <div class="empty-state-icon">📊</div>
+            <div class="empty-state-title" data-i18n="loadingStats">Loading stats…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE: REROUTING VIEW (FACULTY) -->
+      <div id="faculty-reroute" class="page">
+        <div class="page-title" data-i18n="reroutingVis">Rerouting Visualisation</div>
+        <div class="page-sub" data-i18n="reroutingSubFaculty">Escalated and rerouted queries assigned to your profile</div>
+        <div id="facultyRerouteContent">
+          <div class="empty-state">
+            <div class="empty-state-icon">🔄</div>
+            <div class="empty-state-title" data-i18n="loadingEscalated">Loading escalated queries…</div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:20px">
+          <div class="card-title" data-i18n="rlffImpact">RLFF Impact on Your Score</div>
+          <div style="font-size:13.5px;color:var(--muted);margin-bottom:14px;line-height:1.6;" data-i18n="rlffImpactDesc">Your feedback actions directly update your domain score in real-time through the RLFF system.</div>
+          <div class="rlff-event event-green">
+            <div class="rlff-label label-green" data-i18n="howRelevanceHelps">How Relevance Helps You</div>
+            <div style="font-size:13px" data-i18n="relevanceDesc">Marking queries as <span class="status-badge status-resolved" style="font-size:11px" data-i18n="relevant">Relevant</span> increases your domain score</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:4px" data-i18n="relevanceFormula">Formula: score += 0.03 × (1 − score)</div>
+          </div>
+          <div class="rlff-event event-info">
+            <div style="font-size:12px;color:var(--navy);margin-bottom:4px" data-i18n="systemMessage">System Message</div>
+            <div style="font-size:13px;font-style:italic;font-family:'Cormorant Garamond',serif;" data-i18n="systemQuote">"Higher domain scores mean more relevant queries routed to you with higher priority."</div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Toast Area -->
+<div id="toastArea" class="toast-area"></div>
+
+<script>
+/* ═══════════════════════════════════════════════
+   Scholar Connect — Integrated JavaScript
+   Backend: FastAPI on http://localhost:8000
+═══════════════════════════════════════════════ */
+
+const API = 'http://localhost:8000';
+
+// ── State ─────────────────────────────────────
+let token    = localStorage.getItem('sc_token') || null;
+let curUser  = JSON.parse(localStorage.getItem('sc_user') || 'null');
+let currentQueryId  = null;
+let confirmedDetails = null;
+let currentPapers   = [];
+let lastUserMsg     = '';
+let chatHistory     = [];   // [{role:'user'|'ai', content}]
+let latestTopicHint = '';
+let chatPhase       = 1;
+let activeSessionId = null;
+let msgPollInterval = null;
+let reqBadgePollInterval = null;
+
+// ── Toast ─────────────────────────────────────
+function fireToast(msg) {
+  const area  = document.getElementById('toastArea');
+  const t     = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  area.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.4s'; setTimeout(() => t.remove(), 400); }, 3000);
+}
+
+// ── Loading overlay ───────────────────────────
+function showLoading(msg = 'Processing…') {
+  document.getElementById('loadingText').textContent = msg;
+  document.getElementById('loadingOverlay').classList.add('active');
+}
+function hideLoading() {
+  document.getElementById('loadingOverlay').classList.remove('active');
+}
+
+// ── API helper ────────────────────────────────
+async function apiFetch(path, method = 'GET', body = null) {
+  const opts = {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { 'Authorization': 'Bearer ' + token } : {})
+    }
+  };
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(API + path, opts);
+  if (!res.ok) {
+    let err = { detail: 'Request failed (' + res.status + ')' };
+    try { err = await res.json(); } catch(e) {}
+    throw new Error(err.detail || JSON.stringify(err));
+  }
+  return res.json();
+}
+
+// ── View management ───────────────────────────
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+// ── Auto-restore session ──────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  // Password toggle
+  document.querySelectorAll('.toggle-pw').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const input = document.getElementById(btn.dataset.target);
+      input.type = input.type === 'password' ? 'text' : 'password';
+    });
+  });
+
+  // Student login
+  document.getElementById('studentLoginBtn').addEventListener('click', () => doLogin());
+  // Faculty login
+  document.getElementById('facultyLoginBtn').addEventListener('click', () => doLogin());
+
+  // Enter key on password field
+  document.getElementById('login-password').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doLogin();
+  });
+
+  // Restore session if token exists
+  if (token && curUser) {
+    if (curUser.role === 'student') {
+      initStudentDashboard();
+      showView('studentView');
+    } else if (curUser.role === 'faculty') {
+      initFacultyDashboard();
+      showView('facultyView');
+    }
+  }
+});
+
+// ── Demo credential fill ──────────────────────
+function fillCreds(email, pass) {
+  document.getElementById('login-email').value = email;
+  document.getElementById('login-password').value = pass;
+  fireToast('Credentials filled — click a login button.');
+}
+
+// ── Login ─────────────────────────────────────
+async function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pass  = document.getElementById('login-password').value.trim();
+  if (!email) { fireToast('⚠ Please enter your email.'); return; }
+  if (!pass)  { fireToast('⚠ Please enter your password.'); return; }
+
+  showLoading('Verifying credentials…');
+  try {
+    const data = await apiFetch('/login', 'POST', { email, password: pass });
+    token   = data.access_token;
+    curUser = { name: data.name, role: data.role, email };
+    localStorage.setItem('sc_token', token);
+    localStorage.setItem('sc_user', JSON.stringify(curUser));
+
+    hideLoading();
+    fireToast('Welcome, ' + data.name + '!');
+
+    if (data.role === 'student') {
+      initStudentDashboard();
+      showView('studentView');
+    } else {
+      initFacultyDashboard();
+      showView('facultyView');
+    }
+  } catch (e) {
+    hideLoading();
+    fireToast('⚠ ' + e.message);
+  }
+}
+
+// ── Logout ────────────────────────────────────
+function doLogout() {
+  token   = null;
+  curUser = null;
+  localStorage.removeItem('sc_token');
+  localStorage.removeItem('sc_user');
+  currentQueryId = null; confirmedDetails = null; currentPapers = [];
+  lastUserMsg = ''; chatPhase = 1; activeSessionId = null;
+  stopMsgPoll(); stopReqBadgePoll();
+  fireToast('Logged out successfully.');
+  showView('loginView');
+}
+
+// ── Register Modal ────────────────────────────
+function openRegister() {
+  document.getElementById('registerModal').classList.add('active');
+}
+function closeRegister() {
+  document.getElementById('registerModal').classList.remove('active');
+}
+async function doRegister() {
+  const name  = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const pass  = document.getElementById('reg-password').value.trim();
+  const role  = document.getElementById('reg-role').value;
+  if (!name || !email || !pass) { fireToast('⚠ All fields are required.'); return; }
+
+  showLoading('Creating account…');
+  try {
+    const data = await apiFetch('/register', 'POST', { name, email, password: pass, role });
+    token   = data.access_token;
+    curUser = { name: data.name, role: data.role, email };
+    localStorage.setItem('sc_token', token);
+    localStorage.setItem('sc_user', JSON.stringify(curUser));
+    hideLoading();
+    closeRegister();
+    fireToast('Account created! Welcome, ' + data.name + '.');
+    if (data.role === 'student') { initStudentDashboard(); showView('studentView'); }
+    else { initFacultyDashboard(); showView('facultyView'); }
+  } catch (e) {
+    hideLoading();
+    fireToast('⚠ ' + e.message);
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   STUDENT FUNCTIONS
+═══════════════════════════════════════════════ */
+
+function initStudentDashboard() {
+  document.getElementById('studentUserPill').textContent = '🎓 ' + (curUser?.name || t('student'));
+  loadStudentStats();
+  resetChatPhase();
+  document.getElementById('aiContent').innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-title">${t('noQueryYet')}</div><p>${t('goToChatBegin')}</p></div>`;
+  document.getElementById('facultyMatchContent').innerHTML = `<div class="empty-state"><div class="empty-state-icon">👨‍🏫</div><div class="empty-state-title">${t('noMatchesYet')}</div><p>${t('completePhase3')}</p></div>`;
+  startReqBadgePoll();
+}
+
+async function loadStudentStats() {
+  try {
+    const queries = await apiFetch('/student/queries');
+    const active   = queries.filter(q => q.status !== 'resolved').length;
+    const resolved = queries.filter(q => q.status === 'resolved').length;
+    document.getElementById('homeActiveCount').textContent = active;
+    document.getElementById('homeActiveLabel').textContent = active > 0 ? '↑ ' + active + ' ' + t('awaitingResponse') : t('allResolved');
+    document.getElementById('homeResolvedCount').textContent = resolved;
+    document.getElementById('homeResolvedLabel').textContent = resolved + ' ' + t('facultyResponsesReceived');
+    document.getElementById('trackerBadge').textContent = active;
+  } catch(e) {
+    // Non-fatal
+  }
+}
+
+// ── PHASE HELPERS ─────────────────────────────
+function resetChatPhase() {
+  chatPhase = 1; currentQueryId = null; confirmedDetails = null;
+  currentPapers = []; lastUserMsg = ''; chatHistory = []; latestTopicHint = '';
+  const msgs = document.getElementById('chatMessages');
+  if (msgs) msgs.innerHTML = `<div class="chat-msg ai"><div class="chat-bubble">${t('aiGreeting')}</div></div>`;
+  const cb = document.getElementById('confirmBar'); if (cb) cb.style.display = 'none';
+  const cp = document.getElementById('chatPapersContent'); if (cp) cp.innerHTML = `<div style="color:var(--muted);font-size:12px;line-height:1.6;">${t('papersHint')}</div>`;
+  setPhaseIndicator(1);
+  showPhasePanel(1);
+}
+function setPhaseIndicator(n) {
+  [1,2,3].forEach(i => {
+    const s = document.getElementById('pstep'+i);
+    const c = document.getElementById('pcon'+i);
+    if (!s) return;
+    s.className = 'phase-step' + (i < n ? ' done' : i === n ? ' active' : '');
+    s.querySelector('.phase-num').textContent = i < n ? '✓' : i;
+    if (c) c.className = 'phase-connector' + (i < n ? ' done' : '');
+  });
+}
+function showPhasePanel(n) {
+  document.getElementById('homePhase1').style.display = n===1 ? '' : 'none';
+  document.getElementById('homePhase2').style.display = n===2 ? '' : 'none';
+  document.getElementById('homePhase3').style.display = n===3 ? '' : 'none';
+}
+function backToPhase1() { chatPhase = 1; setPhaseIndicator(1); showPhasePanel(1); }
+function backToPhase2() { chatPhase = 2; setPhaseIndicator(2); showPhasePanel(2); }
+
+// ── PHASE 1: Chat ─────────────────────────────
+function appendChatMsg(role, text) {
+  const wrap = document.getElementById('chatMessages');
+  if (!wrap) return;
+  const d = document.createElement('div');
+  d.className = 'chat-msg ' + role;
+  d.innerHTML = `<div class="chat-bubble">${esc(text).replace(/\n/g,'<br>')}</div>`;
+  wrap.appendChild(d);
+  wrap.scrollTop = wrap.scrollHeight;
+}
+function showChatThinking() {
+  const wrap = document.getElementById('chatMessages');
+  const d = document.createElement('div');
+  d.className = 'chat-msg ai chat-thinking'; d.id = 'chatThinking';
+  d.innerHTML = `<div class="chat-bubble">${t('thinking')}</div>`;
+  wrap.appendChild(d); wrap.scrollTop = wrap.scrollHeight;
+}
+function removeChatThinking() {
+  const el = document.getElementById('chatThinking'); if (el) el.remove();
+}
+function renderChatPapers(papers) {
+  const el = document.getElementById('chatPapersContent');
+  if (!el || !papers.length) return;
+  el.innerHTML = papers.map(p => `
+    <div class="mini-paper">
+      <div class="mini-paper-title">${esc(p.title)}</div>
+      <div class="mini-paper-meta">${p.summary ? esc(p.summary.substring(0,100))+'…' : ''}</div>
+      ${p.link ? `<a href="${esc(p.link)}" target="_blank" style="font-size:10.5px;color:var(--blue-accent);display:inline-block;margin-top:4px;">${t('viewLink')}</a>` : ''}
+    </div>`).join('');
+}
+
+const GT_LANG = { hi: 'hi', es: 'es', fr: 'fr', zh: 'zh-CN' };
+async function translateForDisplay(text) {
+  if (!text || !text.trim() || currentLang === 'en') return text;
+  const tl = GT_LANG[currentLang] || currentLang;
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${tl}&dt=t&q=${encodeURIComponent(text.substring(0, 500))}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    // Response: [ [ ["translated","original",...], ... ], null, "en" ]
+    const translated = data[0]?.map(seg => seg[0]).join('');
+    if (translated) return translated;
+  } catch(e) {}
+  return text;
+}
+
+async function sendChatMsg() {
+  const input = document.getElementById('chatInput');
+  const msg   = input.value.trim();
+  if (!msg) return;
+  lastUserMsg = msg; input.value = '';
+  const displayMsg = await translateForDisplay(msg);
+  appendChatMsg('user', displayMsg);
+  chatHistory.push({ role: 'user', content: msg });
+  showChatThinking();
+  try {
+    const r = await apiFetch('/chat', 'POST', { message: msg, history: chatHistory.slice(-10) });
+    removeChatThinking();
+    const reply = r.reply || '';
+    const displayReply = await translateForDisplay(reply);
+    appendChatMsg('ai', displayReply);
+    chatHistory.push({ role: 'ai', content: reply });
+    if (r.topic_hint) latestTopicHint = r.topic_hint;
+    if (r.papers && r.papers.length) { currentPapers = r.papers; renderChatPapers(r.papers); }
+    // Always reflect current vague state — hide bar if AI is still asking questions
+    document.getElementById('confirmBar').style.display = r.is_vague ? 'none' : 'flex';
+  } catch(e) {
+    removeChatThinking();
+    chatHistory.pop(); // remove failed user message from history
+    const errMsg = await translateForDisplay('Sorry, something went wrong. Please try again.');
+    appendChatMsg('ai', errMsg);
+    fireToast('⚠ ' + e.message);
+  }
+}
+
+// ── PHASE 2: Confirm ──────────────────────────
+async function confirmQuery() {
+  if (!chatHistory.length) { fireToast('⚠ Send a message first.'); return; }
+  // Build a rich final query from the full conversation context
+  const userMsgs = chatHistory.filter(m => m.role === 'user').map(m => m.content).join('. ');
+  const finalQuery = latestTopicHint && latestTopicHint !== 'research query'
+    ? `${latestTopicHint} — ${userMsgs}`
+    : userMsgs || lastUserMsg;
+  stopReqBadgePoll(); // pause background polling during LLM call
+  showLoading(t('processingQuery'));
+  try {
+    const r = await apiFetch('/chat/confirm', 'POST', { final_query: finalQuery, papers: currentPapers });
+    hideLoading();
+    currentQueryId = r.query_id; confirmedDetails = r;
+    document.getElementById('confirmCard').innerHTML = `
+      <div class="confirm-label">${t('confirmedResearchQuery')}${r.query_id}</div>
+      <div class="confirm-query">"${esc(r.refined_query)}"</div>
+      <div class="confirm-meta">
+        ${r.domain ? `<span class="ai-tag tag-blue">${esc(r.domain)}</span>` : ''}
+        ${r.level  ? `<span class="ai-tag tag-gold">${esc(r.level)}</span>`  : ''}
+      </div>`;
+    renderAISuggestions(r);
+    chatPhase = 2; setPhaseIndicator(2); showPhasePanel(2);
+    loadStudentStats();
+    startReqBadgePoll(); // resume polling
+    fireToast(t('queryConfirmed'));
+  } catch(e) { hideLoading(); startReqBadgePoll(); fireToast('⚠ ' + e.message); }
+}
+
+// ── PHASE 3: Find Faculty ──────────────────────
+async function findFaculty() {
+  if (!currentQueryId) { fireToast('⚠ ' + t('confirmQueryFirst')); return; }
+  showLoading(t('findingFacultyMatches'));
+  try {
+    const r = await apiFetch('/chat/recommend', 'POST', { query_id: currentQueryId });
+    hideLoading();
+    renderHomeFacultyMatches(r.faculty_recommendations);
+    renderFacultyMatches(r.faculty_recommendations);
+    chatPhase = 3; setPhaseIndicator(3); showPhasePanel(3);
+    fireToast(t('facultyMatchesLoaded'));
+  } catch(e) { hideLoading(); fireToast('⚠ ' + e.message); }
+}
+
+function renderHomeFacultyMatches(recs) {
+  if (!recs || !recs.length) {
+    document.getElementById('homeFacultyMatches').innerHTML = `<div class="empty-state"><div class="empty-state-icon">👨‍🏫</div><div class="empty-state-title">${t('noFacultyFound')}</div><p>${t('rephraseQuery')}</p></div>`;
+    return;
+  }
+  const avatarStyles = ['avatar-navy','avatar-gold','avatar-muted'];
+  document.getElementById('homeFacultyMatches').innerHTML = recs.map((r,i) => {
+    const initials = r.faculty_name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+    const pct = n => Math.round(n*100);
+    return `<div class="faculty-card">
+      <div class="faculty-header">
+        <div class="faculty-header-left">
+          <div class="faculty-avatar ${avatarStyles[i%3]}">${initials}</div>
+          <div><div class="faculty-name">${esc(r.faculty_name)}</div><div class="faculty-dept">${esc(r.email||'')}</div></div>
+        </div>
+        <div class="match-score-badge">${t('matchLabel')} ${pct(r.final_score)}%</div>
+      </div>
+      <div class="score-bar-wrap"><div class="score-label"><span>${t('semanticLabel')}</span><span>${pct(r.sim_score)}%</span></div><div class="score-bar-bg"><div class="score-bar-fill fill-navy" style="width:${pct(r.sim_score)}%"></div></div></div>
+      <div class="score-bar-wrap"><div class="score-label"><span>${t('domainRLFF')}</span><span>${pct(r.domain_score)}%</span></div><div class="score-bar-bg"><div class="score-bar-fill fill-gold" style="width:${pct(r.domain_score)}%"></div></div></div>
+      ${r.explanation ? `<div class="faculty-reason">"${esc(r.explanation)}"</div>` : ''}
+      <div class="btn-row" style="margin-top:12px;">
+        <button class="btn ${i===0?'btn-primary':'btn-outline'}" onclick="assignFaculty(${currentQueryId},'${esc(r.faculty_name)}')">${t('sendQueryBtn')}</button>
+        <button class="btn btn-outline" onclick="requestActiveChat('${esc(r.faculty_name)}')">${t('requestChatBtn')}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Active Chat — Request ─────────────────────
+async function requestActiveChat(facultyName) {
+  if (!currentQueryId) { fireToast('⚠ ' + t('confirmQueryFirst')); return; }
+  showLoading(t('sendingChatRequest'));
+  try {
+    await apiFetch('/chat/request', 'POST', {
+      faculty_name: facultyName,
+      query_id: currentQueryId,
+      topic: confirmedDetails?.refined_query || ''
+    });
+    hideLoading();
+    fireToast('✓ Chat request sent to ' + facultyName + '! Expires in 10 min.');
+    studentNav('activechat');
+  } catch(e) { hideLoading(); fireToast('⚠ ' + e.message); }
+}
+
+// ── Active Chat — Student requests/sessions ───
+async function loadStudentChatRequests() {
+  try {
+    const reqs = await apiFetch('/chat/requests/outgoing');
+    renderStudentRequests(reqs);
+  } catch(e) {
+    document.getElementById('chatRequestsContent').innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠</div><div class="empty-state-title">${esc(e.message)}</div></div>`;
+  }
+}
+
+function renderStudentRequests(reqs) {
+  const el = document.getElementById('chatRequestsContent');
+  if (!reqs.length) { el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">💬</div><div class="empty-state-title">${t('noRequestsSent')}</div><p>${t('requestFromFacultyMatch')}</p></div>`; return; }
+  const statusLabel = { pending: t('statusPendingLabel'), accepted: t('statusAcceptedLabel'), declined: t('statusDeclinedLabel'), expired: t('statusExpiredLabel') };
+  el.innerHTML = reqs.map(r => {
+    const cls = 'req-card req-' + r.status;
+    const expiresAt = r.expires_at ? new Date(r.expires_at) : null;
+    const minsLeft = expiresAt ? Math.max(0, Math.round((expiresAt - Date.now())/60000)) : 0;
+    return `<div class="${cls}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <div>
+          <div style="font-weight:600;font-size:14px;color:var(--navy);">${esc(r.faculty_name)}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">${esc(r.topic||t('generalResearch'))}</div>
+        </div>
+        <span class="status-badge ${r.status==='pending'?'status-pending':r.status==='accepted'?'status-resolved':r.status==='declined'?'status-escalated':''}">
+          <span class="dot"></span> ${statusLabel[r.status]||r.status}
+        </span>
+      </div>
+      ${r.status==='pending' ? `<div class="req-timer">${minsLeft} ${t('minLeft')}</div>` : ''}
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;">${new Date(r.created_at).toLocaleString()}</div>
+    </div>`;
+  }).join('');
+}
+
+async function loadStudentSessions() {
+  try {
+    const sessions = await apiFetch('/chat/sessions');
+    renderStudentSessions(sessions);
+  } catch(e) {}
+}
+
+function renderStudentSessions(sessions) {
+  const el = document.getElementById('chatSessionsContent');
+  if (!sessions.length) { el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">💬</div><div class="empty-state-title">${t('noConversations')}</div><p>${t('acceptChatBegin')}</p></div>`; return; }
+  el.innerHTML = sessions.map(s => `
+    <div class="session-card" id="scard-${s.session_id}">
+      <div class="session-header" onclick="toggleSession(${s.session_id},'student')">
+        <div class="session-header-info">
+          <div class="session-header-title">${esc(s.other_party)}</div>
+          <div class="session-header-sub">${esc(s.topic||'General')} · ${s.status}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:11px;color:rgba(255,255,255,0.5);">${esc(s.last_message||'').substring(0,40)}</span>
+          <span style="font-size:16px;">▾</span>
+        </div>
+      </div>
+      <div class="session-body" id="sbody-${s.session_id}">
+        <div class="session-messages" id="smsgs-${s.session_id}"></div>
+        ${s.status==='active' ? `
+        <div class="session-input-row">
+          <input class="session-input" id="sinput-${s.session_id}" placeholder="${t('typeMessage')}" onkeydown="if(event.key==='Enter')sendSessionMsg(${s.session_id})"/>
+          <button class="btn btn-primary" style="padding:7px 14px;font-size:12px;" onclick="sendSessionMsg(${s.session_id})">${t('send')}</button>
+          <button class="btn btn-red" style="padding:7px 12px;font-size:11px;" onclick="closeSessionById(${s.session_id})">${t('cancel')}</button>
+        </div>` : `<div style="padding:10px 14px;font-size:12px;color:var(--muted);background:var(--surface);border-top:1px solid var(--border);">${t('sessionClosed')}</div>`}
+      </div>
+    </div>`).join('');
+}
+
+async function toggleSession(sessionId, role) {
+  const body = document.getElementById('sbody-' + sessionId);
+  if (!body) return;
+  const isOpen = body.classList.contains('open');
+  if (isOpen) { body.classList.remove('open'); stopMsgPoll(); activeSessionId = null; return; }
+  body.classList.add('open');
+  activeSessionId = sessionId;
+  await refreshSessionMessages(sessionId, role);
+  startMsgPoll(sessionId, role);
+  // Pre-fill input with confirmed topic for student if input is empty
+  if (role === 'student') {
+    const input = document.getElementById('sinput-' + sessionId);
+    if (input && !input.value && confirmedDetails?.refined_query) {
+      input.value = confirmedDetails.refined_query;
+      input.focus();
+    }
+  }
+}
+
+async function refreshSessionMessages(sessionId, role) {
+  try {
+    const data = await apiFetch('/chat/session/' + sessionId + '/messages');
+    const el = document.getElementById('smsgs-' + sessionId);
+    if (!el) return;
+    el.innerHTML = data.messages.map(m => {
+      const isSystem = m.sender_role === 'system';
+      const isMine = (role==='student' && m.sender_role==='student') || (role==='faculty' && m.sender_role==='faculty');
+      const cls = isSystem ? 'sysmsg' : isMine ? 'mine' : 'theirs';
+      return `<div class="session-msg ${cls}">
+        ${!isSystem && !isMine ? `<div class="session-msg-name">${esc(m.sender_name)}</div>` : ''}
+        <div class="session-bubble">${esc(m.content).replace(/\n/g,'<br>')}</div>
+      </div>`;
+    }).join('');
+    el.scrollTop = el.scrollHeight;
+  } catch(e) {}
+}
+
+async function sendSessionMsg(sessionId) {
+  const input = document.getElementById('sinput-' + sessionId);
+  const content = input?.value.trim();
+  if (!content) return;
+  input.value = '';
+  try {
+    await apiFetch('/chat/message', 'POST', { session_id: sessionId, content });
+    const role = curUser?.role || 'student';
+    await refreshSessionMessages(sessionId, role);
+  } catch(e) { fireToast('⚠ ' + e.message); }
+}
+
+async function closeSessionById(sessionId) {
+  try {
+    await apiFetch('/chat/session/' + sessionId + '/close', 'POST');
+    stopMsgPoll(); activeSessionId = null;
+    fireToast('Session closed.');
+    const role = curUser?.role || 'student';
+    if (role === 'student') { loadStudentChatRequests(); loadStudentSessions(); }
+    else { loadIncomingRequests(); loadFacultySessions(); }
+  } catch(e) { fireToast('⚠ ' + e.message); }
+}
+
+function startMsgPoll(sessionId, role) {
+  stopMsgPoll();
+  msgPollInterval = setInterval(() => refreshSessionMessages(sessionId, role), 3000);
+}
+function stopMsgPoll() { if (msgPollInterval) { clearInterval(msgPollInterval); msgPollInterval = null; } }
+
+// ── Active Chat — Faculty incoming ────────────
+async function loadIncomingRequests() {
+  try {
+    const reqs = await apiFetch('/chat/requests/incoming');
+    renderIncomingRequests(reqs);
+    const n = reqs.length;
+    ['incomingReqBadge','incomingReqBadgeSide'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.style.display = n > 0 ? 'inline-block' : 'none';
+      el.textContent = n;
+    });
+  } catch(e) {
+    document.getElementById('incomingRequestsContent').innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠</div><div class="empty-state-title">${esc(e.message)}</div></div>`;
+  }
+}
+
+function renderIncomingRequests(reqs) {
+  const el = document.getElementById('incomingRequestsContent');
+  if (!reqs.length) { el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">📨</div><div class="empty-state-title">${t('noPendingRequests')}</div><p>${t('studentsWillAppear')}</p></div>`; return; }
+  el.innerHTML = reqs.map(r => `
+    <div class="req-card req-pending" id="ireq-${r.request_id}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
+        <div>
+          <div style="font-weight:600;font-size:14px;color:var(--navy);">${esc(r.student_name)}</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">${esc(r.topic||t('generalResearch'))}</div>
+        </div>
+        <div class="req-timer">${r.mins_left} ${t('minLeft')}</div>
+      </div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:10px;">${new Date(r.created_at).toLocaleString()}</div>
+      <div class="btn-row">
+        <button class="btn btn-green" onclick="acceptRequest(${r.request_id})">${t('acceptBtn')}</button>
+        <button class="btn btn-red"   onclick="declineRequest(${r.request_id})">${t('declineBtn')}</button>
+      </div>
+    </div>`).join('');
+}
+
+async function acceptRequest(reqId) {
+  showLoading('Accepting request…');
+  try {
+    const r = await apiFetch('/chat/request/' + reqId + '/accept', 'POST');
+    hideLoading();
+    fireToast('✓ Chat accepted! Session #' + r.session_id + ' is now active.');
+    loadIncomingRequests();
+    loadFacultySessions();
+    facultyNav('activechat');
+  } catch(e) { hideLoading(); fireToast('⚠ ' + e.message); }
+}
+
+async function declineRequest(reqId) {
+  try {
+    await apiFetch('/chat/request/' + reqId + '/decline', 'POST');
+    fireToast('Request declined.');
+    loadIncomingRequests();
+  } catch(e) { fireToast('⚠ ' + e.message); }
+}
+
+async function loadFacultySessions() {
+  try {
+    const sessions = await apiFetch('/chat/sessions');
+    renderFacultySessions(sessions);
+  } catch(e) {}
+}
+
+function renderFacultySessions(sessions) {
+  const el = document.getElementById('facultySessionsContent');
+  if (!sessions.length) { el.innerHTML = `<div class="empty-state"><div class="empty-state-icon">💬</div><div class="empty-state-title">${t('noConversationsFaculty')}</div><p>${t('acceptStudentChats')}</p></div>`; return; }
+  el.innerHTML = sessions.map(s => `
+    <div class="session-card" id="scard-${s.session_id}">
+      <div class="session-header" onclick="toggleSession(${s.session_id},'faculty')">
+        <div class="session-header-info">
+          <div class="session-header-title">${esc(s.other_party)}</div>
+          <div class="session-header-sub">${esc(s.topic||'General')} · ${s.status}</div>
+        </div>
+        <span style="font-size:16px;">▾</span>
+      </div>
+      <div class="session-body" id="sbody-${s.session_id}">
+        <div class="session-messages" id="smsgs-${s.session_id}"></div>
+        ${s.status==='active' ? `
+        <div class="session-input-row">
+          <input class="session-input" id="sinput-${s.session_id}" placeholder="${t('typeMessage')}" onkeydown="if(event.key==='Enter')sendSessionMsg(${s.session_id})"/>
+          <button class="btn btn-primary" style="padding:7px 14px;font-size:12px;" onclick="sendSessionMsg(${s.session_id})">${t('send')}</button>
+          <button class="btn btn-red" style="padding:7px 12px;font-size:11px;" onclick="closeSessionById(${s.session_id})">${t('cancel')}</button>
+        </div>` : `<div style="padding:10px 14px;font-size:12px;color:var(--muted);background:var(--surface);border-top:1px solid var(--border);">${t('sessionClosed')}</div>`}
+      </div>
+    </div>`).join('');
+}
+
+// ── Request badge polling ─────────────────────
+async function pollReqBadge() {
+  if (!curUser || curUser.role !== 'student') return;
+  try {
+    const reqs = await apiFetch('/chat/requests/outgoing');
+    const pending = reqs.filter(r => r.status === 'pending').length;
+    ['chatReqBadge','chatReqBadgeSide'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.style.display = pending > 0 ? 'inline-block' : 'none';
+      el.textContent = pending;
+    });
+  } catch(e) {}
+}
+function startReqBadgePoll() {
+  stopReqBadgePoll();
+  pollReqBadge();
+  reqBadgePollInterval = setInterval(pollReqBadge, 8000);
+}
+function stopReqBadgePoll() { if (reqBadgePollInterval) { clearInterval(reqBadgePollInterval); reqBadgePollInterval = null; } }
+
+// ── Render AI Suggestions ─────────────────────
+function renderAISuggestions(data) {
+  const papers = data.papers || data.research_papers || [];
+
+  const papersHtml = papers.length > 0
+    ? papers.map(p => `
+      <div class="paper-card">
+        <div class="paper-title">${esc(p.title)}</div>
+        <div class="paper-meta">${esc(p.summary ? p.summary.substring(0,120) + '…' : 'Research paper')}</div>
+        ${p.link ? `<a href="${esc(p.link)}" target="_blank" style="font-size:12px;color:var(--blue-accent);display:inline-block;margin-top:6px;">${t('viewOnArxiv')}</a>` : ''}
+      </div>`).join('')
+    : `<p style="color:var(--muted);font-size:13px;">${t('noPapersFound')}</p>`;
+
+  document.getElementById('aiContent').innerHTML = `
+    <div class="grid-2" style="margin-bottom:20px">
+      <div class="card">
+        <div class="card-title">${t('refinedQueryLabel')}</div>
+        <div style="font-size:16px;font-family:'Cormorant Garamond',serif;color:var(--text);margin-bottom:12px;font-style:italic;">"${esc(data.refined_query)}"</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="ai-tag tag-blue">Query #${data.query_id}</span>
+          ${data.domain ? `<span class="ai-tag tag-navy">${esc(data.domain)}</span>` : ''}
+          ${data.level ? `<span class="ai-tag tag-gold">${esc(data.level)}</span>` : ''}
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">${t('nextStepLabel')}</div>
+        <div style="color:var(--muted);font-size:13px;line-height:1.6;margin-bottom:14px;">${t('nextStepDescHtml')}</div>
+        <button class="btn btn-primary" onclick="studentNav('home')">${t('backToHomeBtn')}</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">${t('researchPapersArxiv')}</div>
+      ${papersHtml}
+    </div>`;
+}
+
+// ── Render Faculty Matches ────────────────────
+function renderFacultyMatches(recs) {
+  if (!recs || recs.length === 0) {
+    document.getElementById('facultyMatchContent').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">👨‍🏫</div>
+        <div class="empty-state-title">${t('noFacultyFound')}</div>
+        <p>${t('noFacultyMatched')}</p>
+      </div>`;
+    return;
+  }
+
+  const avatarStyles = ['avatar-navy', 'avatar-gold', 'avatar-muted'];
+  const badgeBgs = ['background:var(--navy);color:#fff', 'background:var(--gold);color:var(--navy)', 'background:var(--ivory-mid);color:var(--muted)'];
+
+  document.getElementById('facultyMatchContent').innerHTML = recs.map((r, i) => {
+    const initials = r.faculty_name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+    const pct = n => Math.round(n * 100);
+    return `
+    <div class="faculty-card">
+      <div class="faculty-header">
+        <div class="faculty-header-left">
+          <div class="faculty-avatar ${avatarStyles[i % 3]}">${initials}</div>
+          <div>
+            <div class="faculty-name">${esc(r.faculty_name)}</div>
+            <div class="faculty-dept">${esc(r.email || '')}</div>
+          </div>
+        </div>
+        <div class="match-score-badge" style="${badgeBgs[i % 3]}">${t('matchLabel')} ${pct(r.final_score)}%</div>
+      </div>
+      <div class="score-bar-wrap">
+        <div class="score-label"><span>${t('semanticSimilarity')}</span><span>${pct(r.sim_score)}%</span></div>
+        <div class="score-bar-bg"><div class="score-bar-fill fill-navy" style="width:${pct(r.sim_score)}%"></div></div>
+      </div>
+      <div class="score-bar-wrap">
+        <div class="score-label"><span>${t('domainScoreRLFF')}</span><span>${pct(r.domain_score)}%</span></div>
+        <div class="score-bar-bg"><div class="score-bar-fill fill-gold" style="width:${pct(r.domain_score)}%"></div></div>
+      </div>
+      <div class="score-bar-wrap">
+        <div class="score-label"><span>${t('finalMatchScore')}</span><span>${pct(r.final_score)}%</span></div>
+        <div class="score-bar-bg"><div class="score-bar-fill fill-green" style="width:${pct(r.final_score)}%"></div></div>
+      </div>
+      ${r.explanation ? `<div class="faculty-reason">"${esc(r.explanation)}"</div>` : ''}
+      <div class="btn-row" style="margin-top:12px;">
+        <button class="btn ${i === 0 ? 'btn-primary' : 'btn-outline'}" onclick="assignFaculty(${currentQueryId}, '${esc(r.faculty_name)}')">
+          ${t('sendQueryBtn')}
+        </button>
+        <button class="btn btn-outline" onclick="requestActiveChat('${esc(r.faculty_name)}')">${t('requestChatBtn')}</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Assign Faculty ────────────────────────────
+async function assignFaculty(queryId, facultyName) {
+  if (!queryId) { fireToast('⚠ ' + t('sendQueryFirst')); return; }
+  showLoading(t('findingFacultyMatches'));
+  try {
+    await apiFetch('/student/assign', 'POST', { query_id: queryId, faculty_name: facultyName });
+    hideLoading();
+    fireToast('✓ Query assigned to ' + facultyName + '! Tracking in Query Tracker.');
+    loadStudentStats();
+    await loadStudentQueries();
+    studentNav('tracker');
+  } catch(e) {
+    hideLoading();
+    fireToast('⚠ ' + e.message);
+  }
+}
+
+// ── Load & Render Student Queries ─────────────
+async function loadStudentQueries() {
+  try {
+    const queries = await apiFetch('/student/queries');
+    renderTrackerItems(queries);
+    renderRerouteItems(queries);
+    loadStudentStats();
+  } catch(e) {
+    document.getElementById('trackerContent').innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠</div><div class="empty-state-title">${t('failedLoadQueries')}</div><p>${esc(e.message)}</p></div>`;
+  }
+}
+
+function renderTrackerItems(queries) {
+  if (queries.length === 0) {
+    document.getElementById('trackerContent').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">📋</div>
+        <div class="empty-state-title">${t('noQueriesYet')}</div>
+        <p>${t('submitQueryStart')}</p>
+      </div>`;
+    return;
+  }
+
+  const statusMap = {
+    pending:   { cls: 'status-pending',   dot: '#a0762a', label: t('statusPending'), border: 'var(--gold)' },
+    routed:    { cls: 'status-routed',    dot: '#2e5fa3', label: t('statusRouted'),  border: 'var(--blue-accent)' },
+    rerouted:  { cls: 'status-rerouted',  dot: 'var(--navy)', label: t('statusRerouted'), border: 'var(--navy-light)' },
+    escalated: { cls: 'status-escalated', dot: 'var(--red-accent)', label: t('statusEscalated'), border: 'var(--red-accent)' },
+    resolved:  { cls: 'status-resolved',  dot: 'var(--green-accent)', label: t('statusResolved') + ' ✓', border: 'var(--green-accent)' }
+  };
+
+  // Timeline for most recent active query
+  const activeQ = queries.find(q => q.status !== 'resolved');
+  let timelineHtml = '';
+  if (activeQ) {
+    const s = statusMap[activeQ.status] || statusMap.pending;
+    timelineHtml = `
+    <div class="card" style="margin-bottom:20px">
+      <div class="card-title">${t('liveTimeline')}${activeQ.query_id}</div>
+      <div class="timeline">
+        <div class="tl-step"><div class="tl-node done">✓</div><div class="tl-label">${t('querySent')}</div></div>
+        <div class="tl-connector done"></div>
+        <div class="tl-step"><div class="tl-node ${['routed','resolved','rerouted','escalated'].includes(activeQ.status)?'done':'current'}">
+          ${['routed','resolved','rerouted','escalated'].includes(activeQ.status)?'✓':'●'}
+        </div><div class="tl-label">${esc(activeQ.assigned_faculty || t('unassigned'))}</div></div>
+        <div class="tl-connector ${activeQ.status==='resolved'?'done':''}"></div>
+        <div class="tl-step"><div class="tl-node ${activeQ.status==='resolved'?'done':activeQ.status==='escalated'?'fail':''}">
+          ${activeQ.status==='resolved'?'✓':activeQ.status==='escalated'?'!':'—'}
+        </div><div class="tl-label">${activeQ.status==='resolved'?t('statusResolved'):activeQ.status==='escalated'?t('escalatedBadge'):t('awaiting')}</div></div>
+      </div>
+    </div>`;
+  }
+
+  const items = queries.map(q => {
+    const s = statusMap[q.status] || statusMap.pending;
+    const ts = q.timestamp ? new Date(q.timestamp).toLocaleString() : 'Unknown';
+    return `
+    <div class="tracker-item" style="border-left-color:${s.border}">
+      <div class="tracker-header">
+        <div>
+          <div class="tracker-id">Query #${q.query_id}</div>
+          <div class="tracker-faculty">${t('facultyLabel')} ${esc(q.assigned_faculty || t('notYetAssigned'))}</div>
+        </div>
+        <span class="status-badge ${s.cls}"><span class="dot"></span> ${s.label}</span>
+      </div>
+      <div class="tracker-query">"${esc(q.refined_query || q.original_query)}"</div>
+      ${q.domain ? `<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px"><span class="ai-tag tag-blue">${esc(q.domain)}</span>${q.level?`<span class="ai-tag tag-gold">${esc(q.level)}</span>`:''}</div>` : ''}
+      <div class="tracker-time">${t('submittedLabel')} ${ts}</div>
+      ${q.faculty_response ? `<div class="tracker-response"><strong style="font-size:11px;text-transform:uppercase;letter-spacing:0.8px;color:var(--green-accent)">${t('facultyResponseLabel')}</strong><br>${esc(q.faculty_response)}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  document.getElementById('trackerContent').innerHTML = timelineHtml + items;
+}
+
+function renderRerouteItems(queries) {
+  const rerouted = queries.filter(q => q.status === 'rerouted' || q.status === 'escalated');
+  if (rerouted.length === 0) {
+    document.getElementById('studentRerouteContent').innerHTML = `
+      <div class="card" style="margin-bottom:20px">
+        <div class="card-title">${t('reroutingStatus')}</div>
+        <div style="color:var(--green-accent);font-size:14px;font-weight:500;">${t('noActiveReroutes')}</div>
+      </div>`;
+    return;
+  }
+  document.getElementById('studentRerouteContent').innerHTML = rerouted.map(q => `
+    <div class="card">
+      <div class="card-title">${q.status === 'escalated' ? t('escalatedBadge') : t('reroutedBadge')} — Query #${q.query_id}</div>
+      <div class="tracker-query" style="margin-bottom:10px">"${esc(q.refined_query || q.original_query)}"</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
+        ${q.domain ? `<span class="ai-tag tag-blue">${esc(q.domain)}</span>` : ''}
+        <span class="status-badge ${q.status==='escalated'?'status-escalated':'status-rerouted'}"><span class="dot"></span>${q.status}</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);">${t('currentlyAssigned')} <strong style="color:var(--navy)">${esc(q.assigned_faculty || '—')}</strong></div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════════
+   FACULTY FUNCTIONS
+═══════════════════════════════════════════════ */
+
+function initFacultyDashboard() {
+  document.getElementById('facultyUserPill').textContent = '👨‍🏫 ' + (curUser?.name || t('faculty'));
+  loadFacultyQueries();
+  loadFacultyProfile();
+  // Poll for incoming chat request badge
+  stopReqBadgePoll();
+  const pollFacultyReqs = async () => {
+    try {
+      const reqs = await apiFetch('/chat/requests/incoming');
+      const n = reqs.length;
+      ['incomingReqBadge','incomingReqBadgeSide'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.display = n > 0 ? 'inline-block' : 'none';
+        el.textContent = n;
+      });
+    } catch(e) {}
+  };
+  pollFacultyReqs();
+  reqBadgePollInterval = setInterval(pollFacultyReqs, 8000);
+}
+
+async function loadFacultyQueries() {
+  try {
+    const queries = await apiFetch('/faculty/queries');
+    renderFacultyInbox(queries);
+    renderFacultyReroute(queries);
+
+    // Update stats
+    const total    = queries.length;
+    const resolved = queries.filter(q => q.status === 'resolved').length;
+    const escalated = queries.filter(q => q.escalated).length;
+    document.getElementById('fStatNew').textContent = total;
+    document.getElementById('fStatNewSub').textContent = escalated > 0 ? `⚠ ${escalated} ${t('escalatedCount')}` : t('noEscalatedCount');
+    document.getElementById('fStatNewSub').className = 'stat-change ' + (escalated > 0 ? 'down' : 'up');
+    document.getElementById('fStatResolved').textContent = resolved;
+  } catch(e) {
+    document.getElementById('facultyInboxContent').innerHTML = `<div class="empty-state"><div class="empty-state-icon">⚠</div><div class="empty-state-title">${t('failedLoadQueries')}</div><p>${esc(e.message)}</p></div>`;
+  }
+}
+
+function renderFacultyInbox(queries) {
+  if (queries.length === 0) {
+    document.getElementById('facultyInboxContent').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-state-icon">📬</div>
+        <div class="empty-state-title">${t('noQueriesAssigned')}</div>
+        <p>${t('checkBackLater')}</p>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('facultyInboxContent').innerHTML = queries.map(q => {
+    const isEscalated = q.escalated;
+    const isResolved  = q.status === 'resolved';
+    const ts = q.timestamp ? new Date(q.timestamp).toLocaleString() : t('unknown');
+
+    return `
+    <div class="inbox-item ${isEscalated ? 'escalated-item' : 'new'}" id="inbox-${q.query_id}">
+      <div class="inbox-meta">
+        <div>
+          <div style="display:flex;align-items:center;gap:10px;">
+            <span style="font-weight:600;font-size:14px;color:var(--navy);">Query #${q.query_id}</span>
+            <span class="status-badge ${isEscalated?'status-escalated':isResolved?'status-resolved':'status-routed'}">
+              <span class="dot"></span> ${isEscalated?t('escalatedStatus'):isResolved?t('resolvedStatus'):t('newStatus')}
+            </span>
+          </div>
+          <div class="inbox-from">${t('fromStudent')} · ${ts}</div>
+        </div>
+        <div style="text-align:right;font-size:11px;color:var(--muted);">
+          ${t('domainLabel')} <strong style="color:var(--navy)">${esc(q.domain || t('general'))}</strong> · ${t('levelLabel')} ${esc(q.level || t('unknown'))}
+        </div>
+      </div>
+      <div class="inbox-query">"${esc(q.refined_query || q.original_query)}"</div>
+      <div style="margin-bottom:10px;display:flex;gap:6px;flex-wrap:wrap;">
+        ${q.domain ? `<span class="ai-tag tag-blue">${esc(q.domain)}</span>` : ''}
+        ${q.level  ? `<span class="ai-tag tag-gold">${esc(q.level)}</span>`   : ''}
+        ${isEscalated ? `<span class="ai-tag" style="background:rgba(185,64,64,0.1);color:var(--red-accent);border:1px solid rgba(185,64,64,0.25)">${t('priorityEscalated')}</span>` : ''}
+      </div>
+      ${isEscalated ? `<div style="background:rgba(185,64,64,0.05);border:1px solid rgba(185,64,64,0.2);border-radius:6px;padding:10px 12px;margin-bottom:10px;font-size:12.5px;color:var(--red-accent);">${t('escalatedWarning')}</div>` : ''}
+      ${isResolved
+        ? `<div class="tracker-response"><strong style="font-size:11px;text-transform:uppercase;letter-spacing:0.8px;color:var(--green-accent)">${t('yourResponse')}</strong><br>${esc(q.faculty_response)}</div>`
+        : `<textarea class="response-area" id="response-${q.query_id}" placeholder="${isEscalated?t('highPriorityPlaceholder'):t('responsePlaceholderText')}"></textarea>
+           <div class="feedback-row">
+             <button class="btn btn-green" id="rel-${q.query_id}" onclick="submitFeedback(${q.query_id},'${esc(q.domain||'')}','relevant',this)">${t('markRelevantBtn')}</button>
+             <button class="btn btn-red" id="irr-${q.query_id}" onclick="submitFeedback(${q.query_id},'${esc(q.domain||'')}','irrelevant',this)">${t('markIrrelevantBtn')}</button>
+             <button class="btn btn-primary" onclick="respondToQuery(${q.query_id})">${t('sendResponseBtn')}</button>
+             <span class="status-badge" id="rlff-${q.query_id}" style="display:none;"></span>
+           </div>`}
+    </div>`;
+  }).join('');
+}
+
+function renderFacultyReroute(queries) {
+  const escalated = queries.filter(q => q.escalated || q.status === 'rerouted');
+  if (escalated.length === 0) {
+    document.getElementById('facultyRerouteContent').innerHTML = `
+      <div class="card">
+        <div class="card-title">${t('reroutedEscalatedTitle')}</div>
+        <div style="color:var(--green-accent);font-size:14px;font-weight:500;">${t('noEscalatedFaculty')}</div>
+      </div>`;
+    return;
+  }
+  document.getElementById('facultyRerouteContent').innerHTML = escalated.map(q => `
+    <div class="card">
+      <div class="card-title">${q.escalated ? t('escalatedBadge') : t('reroutedBadge')} — Query #${q.query_id}</div>
+      <div class="inbox-query" style="margin-bottom:10px">"${esc(q.refined_query || q.original_query)}"</div>
+      <div style="font-size:12px;color:var(--muted);">${t('domainLabel')} <strong>${esc(q.domain||t('general'))}</strong> · ${t('levelLabel')} ${esc(q.level||t('unknown'))}</div>
+      <div style="margin-top:10px">
+        <button class="btn btn-primary" style="font-size:12px" onclick="facultyNav('panel'); document.getElementById('inbox-${q.query_id}')?.scrollIntoView({behavior:'smooth'});">
+          ${t('goToQuery')}
+        </button>
+      </div>
+    </div>`).join('');
+}
+
+// ── Faculty Respond ───────────────────────────
+async function respondToQuery(queryId) {
+  const textarea = document.getElementById('response-' + queryId);
+  if (!textarea || !textarea.value.trim()) { fireToast(t('pleaseTypeResponse')); return; }
+
+  showLoading(t('sendingResponse'));
+  try {
+    await apiFetch('/faculty/respond', 'POST', { query_id: queryId, response: textarea.value.trim() });
+    hideLoading();
+    fireToast('✓ Response sent! Query #' + queryId + ' resolved.');
+    loadFacultyQueries();
+  } catch(e) {
+    hideLoading();
+    fireToast('⚠ ' + e.message);
+  }
+}
+
+// ── Faculty Feedback (RLFF) ───────────────────
+async function submitFeedback(queryId, domain, type, btn) {
+  const badge = document.getElementById('rlff-' + queryId);
+  const inbox = document.getElementById('inbox-' + queryId);
+
+  // Disable feedback buttons
+  const relBtn = document.getElementById('rel-' + queryId);
+  const irrBtn = document.getElementById('irr-' + queryId);
+  if (relBtn) relBtn.disabled = true;
+  if (irrBtn) irrBtn.disabled = true;
+
+  try {
+    await apiFetch('/feedback', 'POST', {
+      query_id: queryId,
+      faculty_name: curUser?.name || '',
+      domain: domain || 'general',
+      feedback: type
+    });
+
+    if (badge) {
+      badge.style.display = 'inline-flex';
+      if (type === 'relevant') {
+        badge.className = 'status-badge status-resolved';
+        badge.innerHTML = t('markedRelevantBadge');
+        inbox.style.borderLeft = '3px solid var(--green-accent)';
+        fireToast(t('markedRelevantToast'));
+      } else {
+        badge.className = 'status-badge status-escalated';
+        badge.innerHTML = t('markedIrrelevantBadge');
+        inbox.style.borderLeft = '3px solid var(--red-accent)';
+        inbox.style.opacity = '0.6';
+        fireToast(t('markedIrrelevantToast'));
+      }
+    }
+  } catch(e) {
+    if (relBtn) relBtn.disabled = false;
+    if (irrBtn) irrBtn.disabled = false;
+    fireToast('⚠ ' + e.message);
+  }
+}
+
+// ── Faculty Profile / Stats ───────────────────
+async function loadFacultyProfile() {
+  try {
+    const p = await apiFetch('/faculty/profile');
+    renderFacultyStats(p);
+
+    // Update top domain score in panel
+    const scores = Object.values(p.domain_scores || {});
+    const maxScore = scores.length > 0 ? Math.max(...scores) : 0;
+    document.getElementById('fStatScore').textContent = maxScore.toFixed(2);
+  } catch(e) {
+    // Non-fatal for stats page
+  }
+}
+
+function renderFacultyStats(p) {
+  const domainScores = p.domain_scores || {};
+  const domainEntries = Object.entries(domainScores);
+  const avgScore = domainEntries.length > 0
+    ? (domainEntries.reduce((s, [,v]) => s + v, 0) / domainEntries.length).toFixed(2)
+    : '—';
+
+  const scoresBarsHtml = domainEntries.length > 0
+    ? domainEntries.sort((a,b) => b[1]-a[1]).map(([domain, score], i) => {
+        const pct = Math.round(score * 100);
+        const fillClass = i === 0 ? 'fill-green' : i === 1 ? 'fill-gold' : 'fill-navy';
+        return `
+        <div class="score-bar-wrap">
+          <div class="score-label"><span>${esc(domain)}</span><span style="color:${score>0.7?'var(--green-accent)':score>0.4?'var(--gold)':'var(--red-accent)'}">${score.toFixed(3)}</span></div>
+          <div class="score-bar-bg"><div class="score-bar-fill ${fillClass}" style="width:${pct}%"></div></div>
+        </div>`;
+      }).join('')
+    : `<p style="color:var(--muted)">${t('noDomainsYet')}</p>`;
+
+  const domainsHtml = (p.domains || []).map(d => `<span class="ai-tag tag-blue">${esc(d)}</span>`).join('');
+  const projectsHtml = (p.projects || []).map(pr => `<div class="suggestion-item"><div class="suggestion-icon">▹</div><div>${esc(pr)}</div></div>`).join('');
+  const papersHtml   = (p.papers || []).map(pa => `<div class="paper-card"><div class="paper-title">${esc(pa)}</div></div>`).join('');
+
+  document.getElementById('facultyStatsContent').innerHTML = `
+    <div class="grid-2" style="margin-bottom:20px">
+      <div class="card">
+        <div class="card-title">${t('rlffDomainScoreBreakdown')}</div>
+        <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;">
+          <div style="flex:1;">
+            ${scoresBarsHtml}
+          </div>
+          <div style="text-align:center;min-width:120px;">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:64px;font-weight:700;color:var(--navy);line-height:1;">${avgScore}</div>
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-top:4px;">${t('avgScore')}</div>
+            <div class="formula-pre" style="margin-top:12px;text-align:left;font-size:10px;">
+Relevant:<br>  s += 0.03×(1−s)<br>Irrelevant:<br>  s -= 0.07×s
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">${t('facultyProfileLabel')}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--navy);margin-bottom:6px">${esc(p.name)}</div>
+        <div style="color:var(--muted);font-size:13px;margin-bottom:14px">${esc(p.email)}</div>
+        <div class="card-title">${t('areasOfExpertise')}</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px">${domainsHtml || `<span style="color:var(--muted)">${t('noneListed')}</span>`}</div>
+        <div style="display:flex;gap:24px">
+          <div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--navy)">${p.active_queries || 0}</div>
+            <div style="font-size:12px;color:var(--muted)">${t('activeQueriesLabel')}</div>
+          </div>
+          <div>
+            <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:700;color:var(--green-accent)">${domainEntries.length}</div>
+            <div style="font-size:12px;color:var(--muted)">${t('domainsTracked')}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    ${projectsHtml ? `
+    <div class="card">
+      <div class="card-title">${t('yourProjects')}</div>
+      ${projectsHtml}
+    </div>` : ''}
+
+    ${papersHtml ? `
+    <div class="card">
+      <div class="card-title">${t('yourPapers')}</div>
+      ${papersHtml}
+    </div>` : ''}`;
+}
+
+/* ═══════════════════════════════════════════════
+   NAVIGATION
+═══════════════════════════════════════════════ */
+
+function studentNav(pageId, navBtn, sidebarItem) {
+  document.querySelectorAll('#studentView .page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('student-' + pageId);
+  if (target) target.classList.add('active');
+
+  document.querySelectorAll('#studentView .nav-link').forEach(l => l.classList.remove('active'));
+  if (navBtn) navBtn.classList.add('active');
+
+  document.querySelectorAll('#studentSidebar .sidebar-item').forEach(l => l.classList.remove('active'));
+  if (sidebarItem) sidebarItem.classList.add('active');
+
+  if (pageId === 'tracker' || pageId === 'reroute') loadStudentQueries();
+  if (pageId === 'activechat') { loadStudentChatRequests(); loadStudentSessions(); }
+}
+
+function facultyNav(pageId, navBtn, sidebarItem) {
+  document.querySelectorAll('#facultyView .page').forEach(p => p.classList.remove('active'));
+  const target = document.getElementById('faculty-' + pageId);
+  if (target) target.classList.add('active');
+
+  document.querySelectorAll('#facultyView .nav-link').forEach(l => l.classList.remove('active'));
+  if (navBtn) navBtn.classList.add('active');
+
+  document.querySelectorAll('#facultySidebar .sidebar-item').forEach(l => l.classList.remove('active'));
+  if (sidebarItem) sidebarItem.classList.add('active');
+
+  if (pageId === 'panel')        loadFacultyQueries();
+  if (pageId === 'stats')        loadFacultyProfile();
+  if (pageId === 'reroute')      loadFacultyQueries();
+  if (pageId === 'chatrequests') loadIncomingRequests();
+  if (pageId === 'activechat')   loadFacultySessions();
+}
+
+/* ═══════════════════════════════════════════════
+   UTILITIES
+═══════════════════════════════════════════════ */
+
+function esc(str) {
+  if (!str && str !== 0) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+/* ═══════════════════════════════════════════════
+   FULL WEBSITE LANGUAGE SWITCHER
+═══════════════════════════════════════════════ */
+
+const TRANSLATIONS = {
+  en: {
+    // Meta
+    pageTitle: 'Scholar Connect — AI Faculty Matching System',
+    // Loading
+    processingQuery: 'Processing your query…',
+    // Register Modal
+    createAccount: 'Create Account',
+    registerSub: 'Register with your institutional credentials.',
+    fullName: 'Full Name',
+    yourFullName: 'Your full name',
+    institutionalEmail: 'Institutional Email',
+    password: 'Password',
+    role: 'Role',
+    student: 'Student',
+    facultyOption: 'Faculty (must have registered email)',
+    cancel: 'Cancel',
+    createAccountBtn: 'Create Account →',
+    // Login Left Panel
+    archiveTagline: 'Archive of Modern Thought',
+    heroTagline: 'A curated symposium for the modern academic — where rigorous research meets elegant digital architecture and AI-powered faculty routing.',
+    feat1Title: 'Deep Archive',
+    feat1Desc: 'Access millions of peer-reviewed documents via arXiv integration.',
+    feat2Title: 'Global Symposium',
+    feat2Desc: 'Connect with leading researchers through AI-powered matching.',
+    feat3Title: 'AI Matching',
+    feat3Desc: 'Semantic query routing with RLFF — learns from every faculty interaction.',
+    feat4Title: 'Live Tracking',
+    feat4Desc: 'Real-time query status with automatic rerouting and escalation.',
+    estLabel: 'EST. 2024 · Scholar Connect',
+    // Login Form
+    welcome: 'Welcome ',
+    loginSubtitle: 'Please enter your institutional credentials to continue.',
+    institutionalId: 'Institutional ID',
+    demoCredsTitle: 'Demo Credentials — all passwords: password123',
+    use: 'Use',
+    faculty: 'Faculty',
+    signInAsRole: 'Sign in as your role',
+    studentLogin: 'Student Login',
+    queryResearch: 'Query & Research',
+    facultyLogin: 'Faculty Login',
+    panelResponses: 'Panel & Responses',
+    newRegister: 'New? Register',
+    institutionalAccess: 'Institutional Access',
+    // Nav & Sidebar
+    navHome: 'Home',
+    navAI: 'AI Suggestions',
+    navFacultyMatch: 'Faculty Match',
+    navQueryTracker: 'Query Tracker',
+    navRerouting: 'Rerouting',
+    navActiveChats: 'Active Chats',
+    navFacultyPanel: 'Faculty Panel',
+    chatRequestsTitle: 'Chat Requests',
+    navMyStats: 'My Stats',
+    navReroutingView: 'Rerouting View',
+    sideNavigation: 'Navigation',
+    sideMonitoring: 'Monitoring',
+    sideChat: 'Chat',
+    tools: 'Tools',
+    logout: 'Logout',
+    // Student Home Page
+    aiResearchAssistant: 'AI Research Assistant',
+    findRightMentor: 'Find the Right Faculty Mentor',
+    homeSubtitle: 'Chat with the AI about your research. When your query is clear, confirm and get faculty recommendations.',
+    phaseDiscuss: 'Discuss',
+    phaseConfirm: 'Confirm',
+    phaseMatch: 'Match',
+    aiGreeting: "Hello! Tell me about your research interest or the topic you need faculty guidance on. I'll help refine your query and find the best mentor for you.",
+    confirmBarHint: 'Your query looks specific enough. Confirm it or keep refining.',
+    confirmQuery: 'Confirm This Query →',
+    chatPlaceholder: 'Describe your research question… (Enter to send)',
+    send: 'Send',
+    researchPapers: 'Research Papers',
+    papersHint: 'Relevant arXiv papers will appear as you chat.',
+    refineFurther: '← Refine Further',
+    findFacultyMatches: 'Find Faculty Matches →',
+    facultyRecommendations: 'Faculty Recommendations',
+    rankedBy: 'Ranked by semantic match + RLFF domain score',
+    back: '← Back',
+    // AI Page
+    aiAnalysis: 'AI Analysis',
+    aiAnalysisSub: 'Intelligent breakdown of your query with research directions and arXiv papers',
+    noQueryYet: 'No Query Submitted Yet',
+    goToHome: 'Go to Home and submit a query to see AI analysis.',
+    // Faculty Match Page
+    facultyMatchResults: 'Faculty Match Results',
+    facultyMatchSub: 'Ranked by semantic similarity, domain expertise, and RLFF feedback score',
+    noMatchesYet: 'No Matches Yet',
+    submitFirst: 'Submit a query first to see faculty recommendations.',
+    // Query Tracker
+    trackerSub: 'Track the status of your submitted queries and faculty responses.',
+    loadingQueries: 'Loading queries…',
+    // Rerouting
+    reroutingVis: 'Rerouting Visualisation',
+    reroutingSubStudent: 'See how the system adapts when queries need rerouting or escalation',
+    loadingRerouting: 'Loading rerouting data…',
+    systemLearning: 'System Learning (RLFF)',
+    rlffExplain: 'Each feedback action updates faculty ranking weights in real-time through Reinforcement Learning from Faculty Feedback.',
+    howItWorks: 'How It Works',
+    rlffQuote: '"Faculty mark queries as relevant or irrelevant. Relevant feedback increases their domain score by +0.03×(1−score). Irrelevant decreases it by −0.07×score."',
+    escalationLogic: 'Escalation Logic',
+    escalationExplain: 'Queries are automatically escalated when they exceed the response timeout or faculty marks them irrelevant.',
+    step1: 'Step 1 — Initial Routing',
+    step1Desc: 'Query assigned to top-ranked faculty',
+    step2: 'Step 2 — Rerouting',
+    step2Desc: 'If irrelevant or timeout → next faculty assigned',
+    step3: 'Step 3 — Escalation',
+    step3Desc: 'After 2 failed attempts → escalation_level incremented',
+    // Active Chats Student
+    activeChatsSubStudent: 'Manage your chat requests and live conversations with faculty.',
+    refresh: '↻ Refresh',
+    loading: 'Loading…',
+    conversations: 'Conversations',
+    noConversations: 'No conversations yet',
+    requestChatHint: 'Request a chat from faculty match results on the Home page.',
+    // Faculty Panel
+    facultyPanelSub: 'Review incoming student queries, mark relevance, and respond. Your feedback updates the RLFF matching algorithm.',
+    assignedQueries: 'Assigned Queries',
+    topDomainScore: 'Top Domain Score',
+    rlffUpdated: '↑ RLFF updated',
+    resolvedQueries: 'Resolved Queries',
+    feedbackDriven: '↑ Feedback-driven improvement',
+    incomingQueries: 'Incoming Queries',
+    markRelevance: 'Mark relevance to improve future matching',
+    // Faculty Chat Requests
+    chatRequestsSub: 'Students requesting live chat sessions. Accept to open a conversation.',
+    loadingRequests: 'Loading requests…',
+    // Faculty Active Chats
+    activeChatsSubFaculty: 'Your ongoing conversations with students.',
+    noActiveSessions: 'No active sessions',
+    acceptToStart: 'Accept chat requests to start conversations.',
+    // Faculty Stats
+    statsTitle: 'My Stats & Performance',
+    statsSub: 'Your RLFF score breakdown and domain expertise ratings.',
+    loadingStats: 'Loading stats…',
+    // Faculty Rerouting
+    reroutingSubFaculty: 'Escalated and rerouted queries assigned to your profile',
+    loadingEscalated: 'Loading escalated queries…',
+    rlffImpact: 'RLFF Impact on Your Score',
+    rlffImpactDesc: 'Your feedback actions directly update your domain score in real-time through the RLFF system.',
+    howRelevanceHelps: 'How Relevance Helps You',
+    relevanceDesc: 'Marking queries as Relevant increases your domain score',
+    relevant: 'Relevant',
+    relevanceFormula: 'Formula: score += 0.03 × (1 − score)',
+    systemMessage: 'System Message',
+    systemQuote: '"Higher domain scores mean more relevant queries routed to you with higher priority."',
+    // Dynamic UI strings
+    thinking: 'Thinking…',
+    viewLink: 'View →',
+    viewOnArxiv: 'View on arXiv →',
+    noFacultyFound: 'No Faculty Found',
+    rephraseQuery: 'Try rephrasing your query.',
+    noFacultyMatched: 'No faculty matched your query. Try rephrasing.',
+    matchLabel: 'Match:',
+    semanticLabel: 'Semantic',
+    semanticSimilarity: 'Semantic Similarity',
+    domainRLFF: 'Domain (RLFF)',
+    domainScoreRLFF: 'Domain Score (RLFF)',
+    finalMatchScore: 'Final Match Score',
+    sendQueryBtn: 'Send Query →',
+    requestChatBtn: '💬 Request Chat',
+    goToChatBegin: 'Go to Home and chat with the AI to begin.',
+    completePhase3: 'Complete Phase 3 on the Home page to see faculty matches here.',
+    awaitingResponse: 'awaiting response',
+    allResolved: 'All resolved',
+    facultyResponsesReceived: 'faculty responses received',
+    confirmedResearchQuery: 'Confirmed Research Query — #',
+    findingFacultyMatches: 'Finding faculty matches…',
+    facultyMatchesLoaded: 'Faculty matches loaded!',
+    noRequestsSent: 'No requests sent yet',
+    requestFromFacultyMatch: 'Request a chat from faculty match results.',
+    acceptChatBegin: 'Accept a chat request to begin.',
+    failedLoadQueries: 'Failed to load queries',
+    noQueriesYet: 'No Queries Yet',
+    submitQueryStart: 'Submit a query from the Home page to get started.',
+    liveTimeline: 'Live Timeline — Query #',
+    querySent: 'Query Sent',
+    unassigned: 'Unassigned',
+    awaiting: 'Awaiting…',
+    statusResolved: 'Resolved',
+    statusEscalated: 'Escalated ⚠',
+    statusPending: 'Pending',
+    statusRouted: 'Routed',
+    statusRerouted: 'Rerouted',
+    facultyLabel: 'Faculty:',
+    notYetAssigned: 'Not yet assigned',
+    submittedLabel: 'Submitted:',
+    facultyResponseLabel: 'Faculty Response:',
+    reroutingStatus: 'Rerouting Status',
+    noActiveReroutes: '✓ No active reroutes — all queries are on track.',
+    escalatedBadge: '⚠ Escalated',
+    reroutedBadge: 'Rerouted',
+    currentlyAssigned: 'Currently assigned to:',
+    noQueriesAssigned: 'No Queries Assigned',
+    checkBackLater: 'You have no pending queries. Check back later.',
+    fromStudent: 'From student',
+    domainLabel: 'Domain:',
+    levelLabel: 'Level:',
+    general: 'General',
+    unknown: 'Unknown',
+    escalatedStatus: 'Escalated ⚠',
+    newStatus: 'New',
+    resolvedStatus: 'Resolved',
+    priorityEscalated: 'Priority: Escalated',
+    escalatedWarning: '⚠ This query has been escalated. High-priority response required.',
+    yourResponse: 'Your Response:',
+    highPriorityPlaceholder: 'High-priority response required…',
+    responsePlaceholderText: 'Type your response or guidance here…',
+    markRelevantBtn: '✓ Relevant',
+    markIrrelevantBtn: '✗ Irrelevant — Reroute',
+    sendResponseBtn: 'Send Response →',
+    markedRelevantBadge: '✓ Marked Relevant · domain score +0.03×(1−score)',
+    markedIrrelevantBadge: '✗ Irrelevant — domain score −0.07×score · Rerouting…',
+    markedRelevantToast: '✓ Marked Relevant — RLFF domain score updated.',
+    markedIrrelevantToast: '✗ Marked Irrelevant — domain score reduced. Query will be rerouted.',
+    escalatedCount: 'escalated',
+    noEscalatedCount: 'No escalated queries',
+    reroutedEscalatedTitle: 'Rerouted / Escalated Queries',
+    noEscalatedFaculty: '✓ No escalated queries. Great work keeping up with responses!',
+    goToQuery: 'Go to Query →',
+    rlffDomainScoreBreakdown: 'RLFF Domain Score Breakdown',
+    avgScore: 'Avg Score',
+    facultyProfileLabel: 'Faculty Profile',
+    areasOfExpertise: 'Areas of Expertise',
+    noneListed: 'None listed',
+    activeQueriesLabel: 'Active Queries',
+    domainsTracked: 'Domains Tracked',
+    yourProjects: 'Your Projects',
+    yourPapers: 'Your Papers',
+    noDomainsYet: 'No domain scores yet.',
+    refinedQueryLabel: 'Refined Query',
+    nextStepLabel: 'Next Step',
+    nextStepDescHtml: 'Query confirmed and saved. Go back to <strong style="color:var(--navy)">Home</strong> and click <em>Find Faculty Matches →</em> to get recommendations, or go to <strong style="color:var(--navy)">Faculty Match</strong> after Phase 3.',
+    backToHomeBtn: '← Back to Home',
+    researchPapersArxiv: 'Research Papers from arXiv',
+    noPapersFound: 'No papers found for this query. Try a more specific topic.',
+    noPendingRequests: 'No pending requests',
+    studentsWillAppear: 'Students will appear here when they request a chat.',
+    noConversationsFaculty: 'No conversations yet',
+    acceptStudentChats: 'Accept student chat requests to begin.',
+    statusPendingLabel: 'Pending',
+    statusAcceptedLabel: 'Accepted',
+    statusDeclinedLabel: 'Declined',
+    statusExpiredLabel: 'Expired',
+    minLeft: 'min left',
+    generalResearch: 'General research discussion',
+    queryConfirmed: '✓ Query confirmed!',
+    sendingChatRequest: 'Sending chat request…',
+    sendingResponse: 'Sending response…',
+    pleaseTypeResponse: '⚠ Please type a response before sending.',
+    confirmQueryFirst: 'Confirm your query first (Phase 2).',
+    sendQueryFirst: 'Please submit a query first.',
+    sessionClosed: 'Session closed',
+    typeMessage: 'Type a message…',
+    acceptBtn: '✓ Accept',
+    declineBtn: '✗ Decline',
+    researchPaper: 'Research paper',
+  },
+
+  hi: {
+    pageTitle: 'Scholar Connect — AI फैकल्टी मिलान प्रणाली',
+    processingQuery: 'आपकी क्वेरी संसाधित हो रही है…',
+    createAccount: 'खाता बनाएं',
+    registerSub: 'अपनी संस्थागत साख के साथ पंजीकरण करें।',
+    fullName: 'पूरा नाम',
+    yourFullName: 'आपका पूरा नाम',
+    institutionalEmail: 'संस्थागत ईमेल',
+    password: 'पासवर्ड',
+    role: 'भूमिका',
+    student: 'छात्र',
+    facultyOption: 'शिक्षक (पंजीकृत ईमेल आवश्यक)',
+    cancel: 'रद्द करें',
+    createAccountBtn: 'खाता बनाएं →',
+    archiveTagline: 'आधुनिक विचार का संग्रह',
+    heroTagline: 'आधुनिक शिक्षाविद के लिए एक क्यूरेटेड मंच — जहाँ कठोर शोध AI-संचालित फैकल्टी रूटिंग से मिलता है।',
+    feat1Title: 'गहरा संग्रह',
+    feat1Desc: 'arXiv एकीकरण के माध्यम से लाखों समीक्षित दस्तावेज़ों तक पहुँचें।',
+    feat2Title: 'वैश्विक संगोष्ठी',
+    feat2Desc: 'AI-संचालित मिलान के माध्यम से शीर्ष शोधकर्ताओं से जुड़ें।',
+    feat3Title: 'AI मिलान',
+    feat3Desc: 'RLFF के साथ अर्थपूर्ण क्वेरी रूटिंग — हर फैकल्टी इंटरैक्शन से सीखता है।',
+    feat4Title: 'लाइव ट्रैकिंग',
+    feat4Desc: 'स्वचालित रीरूटिंग और एस्केलेशन के साथ रीयल-टाइम क्वेरी स्थिति।',
+    estLabel: 'स्थापित 2024 · Scholar Connect',
+    welcomeBack: 'वापस स्वागत है',
+    loginSubtitle: 'जारी रखने के लिए अपनी संस्थागत साख दर्ज करें।',
+    institutionalId: 'संस्थागत आईडी',
+    demoCredsTitle: 'डेमो क्रेडेंशियल — सभी पासवर्ड: password123',
+    use: 'उपयोग करें',
+    faculty: 'शिक्षक',
+    signInAsRole: 'अपनी भूमिका के रूप में साइन इन करें',
+    studentLogin: 'छात्र लॉगिन',
+    queryResearch: 'क्वेरी और अनुसंधान',
+    facultyLogin: 'शिक्षक लॉगिन',
+    panelResponses: 'पैनल और उत्तर',
+    newRegister: 'नए? पंजीकरण करें',
+    institutionalAccess: 'संस्थागत पहुँच',
+    navHome: 'होम',
+    navAI: 'AI सुझाव',
+    navFacultyMatch: 'शिक्षक मिलान',
+    navQueryTracker: 'क्वेरी ट्रैकर',
+    navRerouting: 'पुनः मार्गन',
+    navActiveChats: 'सक्रिय चैट',
+    navFacultyPanel: 'शिक्षक पैनल',
+    chatRequestsTitle: 'चैट अनुरोध',
+    navMyStats: 'मेरे आँकड़े',
+    navReroutingView: 'पुनः मार्गन दृश्य',
+    sideNavigation: 'नेविगेशन',
+    sideMonitoring: 'निगरानी',
+    sideChat: 'चैट',
+    tools: 'टूल्स',
+    logout: 'लॉगआउट',
+    aiResearchAssistant: 'AI अनुसंधान सहायक',
+    findRightMentor: 'सही शिक्षक गुरु खोजें',
+    homeSubtitle: 'अपने शोध के बारे में AI से बात करें। जब क्वेरी स्पष्ट हो, तो पुष्टि करें और शिक्षक सुझाव प्राप्त करें।',
+    phaseDiscuss: 'चर्चा',
+    phaseConfirm: 'पुष्टि',
+    phaseMatch: 'मिलान',
+    aiGreeting: 'नमस्ते! मुझे अपनी शोध रुचि या उस विषय के बारे में बताएं जिस पर आपको शिक्षक मार्गदर्शन चाहिए। मैं आपकी क्वेरी को परिष्कृत करने और सर्वश्रेष्ठ मार्गदर्शक खोजने में मदद करूँगा।',
+    confirmBarHint: 'आपकी क्वेरी पर्याप्त विशिष्ट लगती है। इसे पुष्टि करें या और परिष्कृत करते रहें।',
+    confirmQuery: 'इस क्वेरी की पुष्टि करें →',
+    chatPlaceholder: 'अपना शोध प्रश्न वर्णन करें… (भेजने के लिए Enter दबाएं)',
+    send: 'भेजें',
+    researchPapers: 'शोध पत्र',
+    papersHint: 'चैट करते समय प्रासंगिक arXiv पेपर दिखाई देंगे।',
+    refineFurther: '← और परिष्कृत करें',
+    findFacultyMatches: 'शिक्षक मिलान खोजें →',
+    facultyRecommendations: 'शिक्षक सुझाव',
+    rankedBy: 'सेमांटिक मिलान + RLFF डोमेन स्कोर द्वारा रैंक किया गया',
+    back: '← वापस',
+    aiAnalysis: 'AI विश्लेषण',
+    aiAnalysisSub: 'शोध दिशाओं और arXiv पेपर के साथ क्वेरी का बुद्धिमान विभाजन',
+    noQueryYet: 'अभी तक कोई क्वेरी सबमिट नहीं की गई',
+    goToHome: 'AI विश्लेषण देखने के लिए होम जाएं और क्वेरी सबमिट करें।',
+    facultyMatchResults: 'शिक्षक मिलान परिणाम',
+    facultyMatchSub: 'अर्थपूर्ण समानता, डोमेन विशेषज्ञता और RLFF फीडबैक स्कोर द्वारा रैंक किया गया',
+    noMatchesYet: 'अभी तक कोई मिलान नहीं',
+    submitFirst: 'शिक्षक सुझाव देखने के लिए पहले क्वेरी सबमिट करें।',
+    trackerSub: 'सबमिट की गई क्वेरी और शिक्षक प्रतिक्रियाओं की स्थिति ट्रैक करें।',
+    loadingQueries: 'क्वेरी लोड हो रही हैं…',
+    reroutingVis: 'पुनः मार्गन दृश्य',
+    reroutingSubStudent: 'देखें कि जब क्वेरी को रीरूटिंग या एस्केलेशन की आवश्यकता होती है तो सिस्टम कैसे अनुकूलित होता है',
+    loadingRerouting: 'पुनः मार्गन डेटा लोड हो रहा है…',
+    systemLearning: 'सिस्टम सीखना (RLFF)',
+    rlffExplain: 'प्रत्येक फीडबैक क्रिया रीयल-टाइम में फैकल्टी रैंकिंग वेट को अपडेट करती है।',
+    howItWorks: 'यह कैसे काम करता है',
+    rlffQuote: '"शिक्षक क्वेरी को प्रासंगिक या अप्रासंगिक चिह्नित करते हैं। प्रासंगिक फीडबैक +0.03×(1−score) से डोमेन स्कोर बढ़ाता है। अप्रासंगिक −0.07×score से घटाता है।"',
+    escalationLogic: 'एस्केलेशन लॉजिक',
+    escalationExplain: 'जब क्वेरी प्रतिक्रिया टाइमआउट से अधिक हो या शिक्षक इसे अप्रासंगिक चिह्नित करे, तो यह स्वचालित रूप से एस्केलेट हो जाती है।',
+    step1: 'चरण 1 — प्रारंभिक रूटिंग',
+    step1Desc: 'क्वेरी शीर्ष-रैंक शिक्षक को सौंपी गई',
+    step2: 'चरण 2 — पुनः मार्गन',
+    step2Desc: 'अप्रासंगिक या टाइमआउट पर → अगले शिक्षक को सौंपा गया',
+    step3: 'चरण 3 — एस्केलेशन',
+    step3Desc: '2 विफल प्रयासों के बाद → escalation_level बढ़ाया गया',
+    activeChatsSubStudent: 'अपने चैट अनुरोध और शिक्षकों के साथ लाइव वार्तालाप प्रबंधित करें।',
+    refresh: '↻ ताज़ा करें',
+    loading: 'लोड हो रहा है…',
+    conversations: 'वार्तालाप',
+    noConversations: 'अभी तक कोई वार्तालाप नहीं',
+    requestChatHint: 'होम पेज पर शिक्षक मिलान परिणामों से चैट का अनुरोध करें।',
+    facultyPanelSub: 'आने वाली छात्र क्वेरी की समीक्षा करें, प्रासंगिकता चिह्नित करें, और उत्तर दें। आपका फीडबैक RLFF मिलान एल्गोरिदम को अपडेट करता है।',
+    assignedQueries: 'सौंपी गई क्वेरी',
+    topDomainScore: 'शीर्ष डोमेन स्कोर',
+    rlffUpdated: '↑ RLFF अपडेट हुआ',
+    resolvedQueries: 'हल की गई क्वेरी',
+    feedbackDriven: '↑ फीडबैक-संचालित सुधार',
+    incomingQueries: 'आने वाली क्वेरी',
+    markRelevance: 'भविष्य के मिलान को बेहतर बनाने के लिए प्रासंगिकता चिह्नित करें',
+    chatRequestsSub: 'लाइव चैट सत्र का अनुरोध करने वाले छात्र। वार्तालाप शुरू करने के लिए स्वीकार करें।',
+    loadingRequests: 'अनुरोध लोड हो रहे हैं…',
+    activeChatsSubFaculty: 'छात्रों के साथ आपकी चल रही वार्तालाप।',
+    noActiveSessions: 'कोई सक्रिय सत्र नहीं',
+    acceptToStart: 'वार्तालाप शुरू करने के लिए चैट अनुरोध स्वीकार करें।',
+    statsTitle: 'मेरे आँकड़े और प्रदर्शन',
+    statsSub: 'आपका RLFF स्कोर विवरण और डोमेन विशेषज्ञता रेटिंग।',
+    loadingStats: 'आँकड़े लोड हो रहे हैं…',
+    reroutingSubFaculty: 'आपकी प्रोफ़ाइल को सौंपी गई एस्केलेटेड और रीरूट की गई क्वेरी',
+    loadingEscalated: 'एस्केलेटेड क्वेरी लोड हो रही हैं…',
+    rlffImpact: 'आपके स्कोर पर RLFF का प्रभाव',
+    rlffImpactDesc: 'आपकी फीडबैक क्रियाएं RLFF सिस्टम के माध्यम से रीयल-टाइम में आपका डोमेन स्कोर सीधे अपडेट करती हैं।',
+    howRelevanceHelps: 'प्रासंगिकता आपकी कैसे मदद करती है',
+    relevanceDesc: 'क्वेरी को प्रासंगिक चिह्नित करने से आपका डोमेन स्कोर बढ़ता है',
+    relevant: 'प्रासंगिक',
+    relevanceFormula: 'सूत्र: score += 0.03 × (1 − score)',
+    systemMessage: 'सिस्टम संदेश',
+    systemQuote: '"उच्च डोमेन स्कोर का अर्थ है कि आपको उच्च प्राथमिकता के साथ अधिक प्रासंगिक क्वेरी भेजी जाती हैं।"',
+    thinking: 'सोच रहा है…',
+    viewLink: 'देखें →',
+    viewOnArxiv: 'arXiv पर देखें →',
+    noFacultyFound: 'कोई शिक्षक नहीं मिला',
+    rephraseQuery: 'अपनी क्वेरी दोबारा लिखने का प्रयास करें।',
+    noFacultyMatched: 'आपकी क्वेरी से कोई शिक्षक मेल नहीं खाता। पुनः प्रयास करें।',
+    matchLabel: 'मिलान:',
+    semanticLabel: 'सेमांटिक',
+    semanticSimilarity: 'सेमांटिक समानता',
+    domainRLFF: 'डोमेन (RLFF)',
+    domainScoreRLFF: 'डोमेन स्कोर (RLFF)',
+    finalMatchScore: 'अंतिम मिलान स्कोर',
+    sendQueryBtn: 'क्वेरी भेजें →',
+    requestChatBtn: '💬 चैट अनुरोध करें',
+    goToChatBegin: 'शुरू करने के लिए होम जाएं और AI से चैट करें।',
+    completePhase3: 'शिक्षक मिलान देखने के लिए होम पेज पर चरण 3 पूरा करें।',
+    awaitingResponse: 'उत्तर की प्रतीक्षा में',
+    allResolved: 'सभी हल हो गए',
+    facultyResponsesReceived: 'शिक्षक प्रतिक्रियाएं प्राप्त हुईं',
+    confirmedResearchQuery: 'पुष्टि की गई शोध क्वेरी — #',
+    findingFacultyMatches: 'शिक्षक मिलान खोजे जा रहे हैं…',
+    facultyMatchesLoaded: 'शिक्षक मिलान लोड हो गए!',
+    noRequestsSent: 'अभी तक कोई अनुरोध नहीं भेजा गया',
+    requestFromFacultyMatch: 'शिक्षक मिलान परिणामों से चैट का अनुरोध करें।',
+    acceptChatBegin: 'शुरू करने के लिए चैट अनुरोध स्वीकार करें।',
+    failedLoadQueries: 'क्वेरी लोड करने में विफल',
+    noQueriesYet: 'अभी तक कोई क्वेरी नहीं',
+    submitQueryStart: 'शुरू करने के लिए होम पेज से क्वेरी सबमिट करें।',
+    liveTimeline: 'लाइव टाइमलाइन — क्वेरी #',
+    querySent: 'क्वेरी भेजी गई',
+    unassigned: 'असाइन नहीं किया गया',
+    awaiting: 'प्रतीक्षारत…',
+    statusResolved: 'हल हो गया',
+    statusEscalated: 'एस्केलेट हुआ ⚠',
+    statusPending: 'लंबित',
+    statusRouted: 'रूट किया गया',
+    statusRerouted: 'पुनः रूट किया गया',
+    facultyLabel: 'शिक्षक:',
+    notYetAssigned: 'अभी असाइन नहीं किया गया',
+    submittedLabel: 'सबमिट:',
+    facultyResponseLabel: 'शिक्षक प्रतिक्रिया:',
+    reroutingStatus: 'पुनः मार्गन स्थिति',
+    noActiveReroutes: '✓ कोई सक्रिय रीरूट नहीं — सभी क्वेरी सही रास्ते पर हैं।',
+    escalatedBadge: '⚠ एस्केलेट हुआ',
+    reroutedBadge: 'पुनः रूट किया गया',
+    currentlyAssigned: 'वर्तमान में असाइन:',
+    noQueriesAssigned: 'कोई क्वेरी असाइन नहीं',
+    checkBackLater: 'आपके पास कोई लंबित क्वेरी नहीं है। बाद में जाँचें।',
+    fromStudent: 'छात्र से',
+    domainLabel: 'डोमेन:',
+    levelLabel: 'स्तर:',
+    general: 'सामान्य',
+    unknown: 'अज्ञात',
+    escalatedStatus: 'एस्केलेट हुआ ⚠',
+    newStatus: 'नया',
+    resolvedStatus: 'हल हुआ',
+    priorityEscalated: 'प्राथमिकता: एस्केलेट हुआ',
+    escalatedWarning: '⚠ यह क्वेरी एस्केलेट हो गई है। उच्च-प्राथमिकता प्रतिक्रिया आवश्यक है।',
+    yourResponse: 'आपकी प्रतिक्रिया:',
+    highPriorityPlaceholder: 'उच्च-प्राथमिकता प्रतिक्रिया आवश्यक…',
+    responsePlaceholderText: 'यहाँ अपनी प्रतिक्रिया या मार्गदर्शन लिखें…',
+    markRelevantBtn: '✓ प्रासंगिक',
+    markIrrelevantBtn: '✗ अप्रासंगिक — पुनः रूट करें',
+    sendResponseBtn: 'प्रतिक्रिया भेजें →',
+    markedRelevantBadge: '✓ प्रासंगिक चिह्नित · डोमेन स्कोर +0.03×(1−score)',
+    markedIrrelevantBadge: '✗ अप्रासंगिक — डोमेन स्कोर −0.07×score · पुनः रूट हो रहा है…',
+    markedRelevantToast: '✓ प्रासंगिक चिह्नित — RLFF डोमेन स्कोर अपडेट हुआ।',
+    markedIrrelevantToast: '✗ अप्रासंगिक चिह्नित — डोमेन स्कोर कम हुआ। क्वेरी पुनः रूट होगी।',
+    escalatedCount: 'एस्केलेट हुए',
+    noEscalatedCount: 'कोई एस्केलेट क्वेरी नहीं',
+    reroutedEscalatedTitle: 'पुनः रूट / एस्केलेट क्वेरी',
+    noEscalatedFaculty: '✓ कोई एस्केलेट क्वेरी नहीं। प्रतिक्रियाओं के साथ बने रहने के लिए बढ़िया काम!',
+    goToQuery: 'क्वेरी पर जाएं →',
+    rlffDomainScoreBreakdown: 'RLFF डोमेन स्कोर विवरण',
+    avgScore: 'औसत स्कोर',
+    facultyProfileLabel: 'शिक्षक प्रोफाइल',
+    areasOfExpertise: 'विशेषज्ञता के क्षेत्र',
+    noneListed: 'कोई नहीं',
+    activeQueriesLabel: 'सक्रिय क्वेरी',
+    domainsTracked: 'ट्रैक किए गए डोमेन',
+    yourProjects: 'आपके प्रोजेक्ट',
+    yourPapers: 'आपके पेपर',
+    noDomainsYet: 'अभी तक कोई डोमेन स्कोर नहीं।',
+    refinedQueryLabel: 'परिष्कृत क्वेरी',
+    nextStepLabel: 'अगला चरण',
+    nextStepDescHtml: 'क्वेरी पुष्टि और सहेजी गई। <strong style="color:var(--navy)">होम</strong> पर जाएं और सिफारिशें पाने के लिए <em>शिक्षक मिलान खोजें →</em> पर क्लिक करें।',
+    backToHomeBtn: '← होम पर वापस',
+    researchPapersArxiv: 'arXiv के शोध पेपर',
+    noPapersFound: 'इस क्वेरी के लिए कोई पेपर नहीं मिला। अधिक विशिष्ट विषय आज़माएं।',
+    noPendingRequests: 'कोई लंबित अनुरोध नहीं',
+    studentsWillAppear: 'जब छात्र चैट का अनुरोध करेंगे तो वे यहाँ दिखाई देंगे।',
+    noConversationsFaculty: 'अभी तक कोई वार्तालाप नहीं',
+    acceptStudentChats: 'वार्तालाप शुरू करने के लिए छात्र चैट अनुरोध स्वीकार करें।',
+    statusPendingLabel: 'लंबित',
+    statusAcceptedLabel: 'स्वीकृत',
+    statusDeclinedLabel: 'अस्वीकृत',
+    statusExpiredLabel: 'समाप्त',
+    minLeft: 'मिनट बचे',
+    generalResearch: 'सामान्य शोध चर्चा',
+    queryConfirmed: '✓ क्वेरी पुष्टि हुई!',
+    sendingChatRequest: 'चैट अनुरोध भेजा जा रहा है…',
+    sendingResponse: 'प्रतिक्रिया भेजी जा रही है…',
+    pleaseTypeResponse: '⚠ भेजने से पहले कृपया प्रतिक्रिया टाइप करें।',
+    confirmQueryFirst: 'पहले अपनी क्वेरी की पुष्टि करें (चरण 2)।',
+    sendQueryFirst: 'कृपया पहले एक क्वेरी सबमिट करें।',
+    sessionClosed: 'सत्र बंद हो गया',
+    typeMessage: 'एक संदेश टाइप करें…',
+    acceptBtn: '✓ स्वीकार करें',
+    declineBtn: '✗ अस्वीकार करें',
+    researchPaper: 'शोध पत्र',
+  },
+
+  es: {
+    pageTitle: 'Scholar Connect — Sistema de Emparejamiento de Profesores con IA',
+    processingQuery: 'Procesando tu consulta…',
+    createAccount: 'Crear Cuenta',
+    registerSub: 'Regístrate con tus credenciales institucionales.',
+    fullName: 'Nombre Completo',
+    yourFullName: 'Tu nombre completo',
+    institutionalEmail: 'Correo Institucional',
+    password: 'Contraseña',
+    role: 'Rol',
+    student: 'Estudiante',
+    facultyOption: 'Profesor (debe tener correo registrado)',
+    cancel: 'Cancelar',
+    createAccountBtn: 'Crear Cuenta →',
+    archiveTagline: 'Archivo del Pensamiento Moderno',
+    heroTagline: 'Un simposio curado para el académico moderno — donde la investigación rigurosa se encuentra con la arquitectura digital elegante y el enrutamiento de profesores con IA.',
+    feat1Title: 'Archivo Profundo',
+    feat1Desc: 'Accede a millones de documentos revisados por pares vía integración arXiv.',
+    feat2Title: 'Simposio Global',
+    feat2Desc: 'Conecta con investigadores destacados mediante emparejamiento con IA.',
+    feat3Title: 'Emparejamiento IA',
+    feat3Desc: 'Enrutamiento semántico de consultas con RLFF — aprende de cada interacción.',
+    feat4Title: 'Seguimiento en Vivo',
+    feat4Desc: 'Estado de consulta en tiempo real con re-enrutamiento automático y escalación.',
+    estLabel: 'FUNDADO 2024 · Scholar Connect',
+    welcomeBack: 'Bienvenido de Nuevo',
+    loginSubtitle: 'Por favor ingresa tus credenciales institucionales para continuar.',
+    institutionalId: 'ID Institucional',
+    demoCredsTitle: 'Credenciales Demo — todas las contraseñas: password123',
+    use: 'Usar',
+    faculty: 'Profesor',
+    signInAsRole: 'Inicia sesión según tu rol',
+    studentLogin: 'Acceso Estudiante',
+    queryResearch: 'Consultas e Investigación',
+    facultyLogin: 'Acceso Profesor',
+    panelResponses: 'Panel y Respuestas',
+    newRegister: '¿Nuevo? Regístrate',
+    institutionalAccess: 'Acceso Institucional',
+    navHome: 'Inicio',
+    navAI: 'Sugerencias IA',
+    navFacultyMatch: 'Emparejar Profesor',
+    navQueryTracker: 'Rastreador de Consultas',
+    navRerouting: 'Re-enrutamiento',
+    navActiveChats: 'Chats Activos',
+    navFacultyPanel: 'Panel de Profesor',
+    chatRequestsTitle: 'Solicitudes de Chat',
+    navMyStats: 'Mis Estadísticas',
+    navReroutingView: 'Vista de Re-enrutamiento',
+    sideNavigation: 'Navegación',
+    sideMonitoring: 'Monitoreo',
+    sideChat: 'Chat',
+    tools: 'Herramientas',
+    logout: 'Cerrar Sesión',
+    aiResearchAssistant: 'Asistente de Investigación IA',
+    findRightMentor: 'Encuentra al Profesor Adecuado',
+    homeSubtitle: 'Habla con la IA sobre tu investigación. Cuando tu consulta sea clara, confírmala y obtén recomendaciones de profesores.',
+    phaseDiscuss: 'Discutir',
+    phaseConfirm: 'Confirmar',
+    phaseMatch: 'Emparejar',
+    aiGreeting: '¡Hola! Cuéntame sobre tu interés de investigación o el tema en el que necesitas orientación. Te ayudaré a refinar tu consulta y encontrar el mejor mentor.',
+    confirmBarHint: 'Tu consulta parece lo suficientemente específica. Confírmala o sigue refinando.',
+    confirmQuery: 'Confirmar Esta Consulta →',
+    chatPlaceholder: 'Describe tu pregunta de investigación… (Enter para enviar)',
+    send: 'Enviar',
+    researchPapers: 'Artículos de Investigación',
+    papersHint: 'Los artículos arXiv relevantes aparecerán mientras chateas.',
+    refineFurther: '← Refinar Más',
+    findFacultyMatches: 'Encontrar Profesores →',
+    facultyRecommendations: 'Recomendaciones de Profesores',
+    rankedBy: 'Clasificado por coincidencia semántica + puntuación de dominio RLFF',
+    back: '← Volver',
+    aiAnalysis: 'Análisis IA',
+    aiAnalysisSub: 'Desglose inteligente de tu consulta con direcciones de investigación y artículos arXiv',
+    noQueryYet: 'Ninguna Consulta Enviada Aún',
+    goToHome: 'Ve a Inicio y envía una consulta para ver el análisis IA.',
+    facultyMatchResults: 'Resultados de Emparejamiento',
+    facultyMatchSub: 'Clasificado por similitud semántica, experiencia de dominio y puntuación RLFF',
+    noMatchesYet: 'Sin Coincidencias Aún',
+    submitFirst: 'Envía una consulta primero para ver recomendaciones de profesores.',
+    trackerSub: 'Rastrea el estado de tus consultas enviadas y respuestas de profesores.',
+    loadingQueries: 'Cargando consultas…',
+    reroutingVis: 'Visualización de Re-enrutamiento',
+    reroutingSubStudent: 'Ve cómo el sistema se adapta cuando las consultas necesitan re-enrutamiento o escalación',
+    loadingRerouting: 'Cargando datos de re-enrutamiento…',
+    systemLearning: 'Aprendizaje del Sistema (RLFF)',
+    rlffExplain: 'Cada acción de retroalimentación actualiza los pesos de clasificación de profesores en tiempo real a través del Aprendizaje de Retroalimentación de Profesores.',
+    howItWorks: 'Cómo Funciona',
+    rlffQuote: '"Los profesores marcan consultas como relevantes o irrelevantes. La retroalimentación relevante aumenta su puntuación de dominio en +0.03×(1−puntuación). La irrelevante la reduce en −0.07×puntuación."',
+    escalationLogic: 'Lógica de Escalación',
+    escalationExplain: 'Las consultas se escalan automáticamente cuando superan el tiempo de respuesta o el profesor las marca como irrelevantes.',
+    step1: 'Paso 1 — Enrutamiento Inicial',
+    step1Desc: 'Consulta asignada al profesor mejor clasificado',
+    step2: 'Paso 2 — Re-enrutamiento',
+    step2Desc: 'Si irrelevante o tiempo agotado → siguiente profesor asignado',
+    step3: 'Paso 3 — Escalación',
+    step3Desc: 'Después de 2 intentos fallidos → escalation_level incrementado',
+    activeChatsSubStudent: 'Gestiona tus solicitudes de chat y conversaciones en vivo con profesores.',
+    refresh: '↻ Actualizar',
+    loading: 'Cargando…',
+    conversations: 'Conversaciones',
+    noConversations: 'Sin conversaciones aún',
+    requestChatHint: 'Solicita un chat desde los resultados de emparejamiento en la página de Inicio.',
+    facultyPanelSub: 'Revisa las consultas entrantes de estudiantes, marca la relevancia y responde. Tu retroalimentación actualiza el algoritmo RLFF.',
+    assignedQueries: 'Consultas Asignadas',
+    topDomainScore: 'Puntuación Máxima de Dominio',
+    rlffUpdated: '↑ RLFF actualizado',
+    resolvedQueries: 'Consultas Resueltas',
+    feedbackDriven: '↑ Mejora impulsada por retroalimentación',
+    incomingQueries: 'Consultas Entrantes',
+    markRelevance: 'Marca la relevancia para mejorar el emparejamiento futuro',
+    chatRequestsSub: 'Estudiantes solicitando sesiones de chat en vivo. Acepta para abrir una conversación.',
+    loadingRequests: 'Cargando solicitudes…',
+    activeChatsSubFaculty: 'Tus conversaciones en curso con estudiantes.',
+    noActiveSessions: 'Sin sesiones activas',
+    acceptToStart: 'Acepta solicitudes de chat para iniciar conversaciones.',
+    statsTitle: 'Mis Estadísticas y Rendimiento',
+    statsSub: 'Tu desglose de puntuación RLFF y calificaciones de experiencia en dominios.',
+    loadingStats: 'Cargando estadísticas…',
+    reroutingSubFaculty: 'Consultas escaladas y re-enrutadas asignadas a tu perfil',
+    loadingEscalated: 'Cargando consultas escaladas…',
+    rlffImpact: 'Impacto de RLFF en Tu Puntuación',
+    rlffImpactDesc: 'Tus acciones de retroalimentación actualizan directamente tu puntuación de dominio en tiempo real a través del sistema RLFF.',
+    howRelevanceHelps: 'Cómo la Relevancia Te Ayuda',
+    relevanceDesc: 'Marcar consultas como Relevantes aumenta tu puntuación de dominio',
+    relevant: 'Relevante',
+    relevanceFormula: 'Fórmula: puntuación += 0.03 × (1 − puntuación)',
+    systemMessage: 'Mensaje del Sistema',
+    systemQuote: '"Puntuaciones de dominio más altas significan consultas más relevantes enrutadas a ti con mayor prioridad."',
+    thinking: 'Pensando…',
+    viewLink: 'Ver →',
+    viewOnArxiv: 'Ver en arXiv →',
+    noFacultyFound: 'No se encontraron profesores',
+    rephraseQuery: 'Intenta replantear tu consulta.',
+    noFacultyMatched: 'Ningún profesor coincidió con tu consulta. Intenta replantear.',
+    matchLabel: 'Coincidencia:',
+    semanticLabel: 'Semántico',
+    semanticSimilarity: 'Similitud Semántica',
+    domainRLFF: 'Dominio (RLFF)',
+    domainScoreRLFF: 'Puntuación de Dominio (RLFF)',
+    finalMatchScore: 'Puntuación Final de Coincidencia',
+    sendQueryBtn: 'Enviar Consulta →',
+    requestChatBtn: '💬 Solicitar Chat',
+    goToChatBegin: 'Ve al Inicio y chatea con la IA para comenzar.',
+    completePhase3: 'Completa la Fase 3 en la página de Inicio para ver los emparejamientos aquí.',
+    awaitingResponse: 'esperando respuesta',
+    allResolved: 'Todo resuelto',
+    facultyResponsesReceived: 'respuestas de profesores recibidas',
+    confirmedResearchQuery: 'Consulta de investigación confirmada — #',
+    findingFacultyMatches: 'Buscando coincidencias de profesores…',
+    facultyMatchesLoaded: '¡Coincidencias cargadas!',
+    noRequestsSent: 'Ninguna solicitud enviada aún',
+    requestFromFacultyMatch: 'Solicita un chat desde los resultados de emparejamiento.',
+    acceptChatBegin: 'Acepta una solicitud de chat para comenzar.',
+    failedLoadQueries: 'Error al cargar consultas',
+    noQueriesYet: 'Aún no hay consultas',
+    submitQueryStart: 'Envía una consulta desde Inicio para comenzar.',
+    liveTimeline: 'Línea de tiempo — Consulta #',
+    querySent: 'Consulta enviada',
+    unassigned: 'Sin asignar',
+    awaiting: 'Esperando…',
+    statusResolved: 'Resuelto',
+    statusEscalated: 'Escalado ⚠',
+    statusPending: 'Pendiente',
+    statusRouted: 'Enrutado',
+    statusRerouted: 'Re-enrutado',
+    facultyLabel: 'Profesor:',
+    notYetAssigned: 'Aún no asignado',
+    submittedLabel: 'Enviado:',
+    facultyResponseLabel: 'Respuesta del Profesor:',
+    reroutingStatus: 'Estado de Re-enrutamiento',
+    noActiveReroutes: '✓ Sin re-enrutamientos activos — todas las consultas están en camino.',
+    escalatedBadge: '⚠ Escalado',
+    reroutedBadge: 'Re-enrutado',
+    currentlyAssigned: 'Actualmente asignado a:',
+    noQueriesAssigned: 'No hay consultas asignadas',
+    checkBackLater: 'No tienes consultas pendientes. Vuelve más tarde.',
+    fromStudent: 'Del estudiante',
+    domainLabel: 'Dominio:',
+    levelLabel: 'Nivel:',
+    general: 'General',
+    unknown: 'Desconocido',
+    escalatedStatus: 'Escalado ⚠',
+    newStatus: 'Nuevo',
+    resolvedStatus: 'Resuelto',
+    priorityEscalated: 'Prioridad: Escalado',
+    escalatedWarning: '⚠ Esta consulta ha sido escalada. Se requiere respuesta de alta prioridad.',
+    yourResponse: 'Tu Respuesta:',
+    highPriorityPlaceholder: 'Respuesta de alta prioridad requerida…',
+    responsePlaceholderText: 'Escribe tu respuesta o guía aquí…',
+    markRelevantBtn: '✓ Relevante',
+    markIrrelevantBtn: '✗ Irrelevante — Re-enrutar',
+    sendResponseBtn: 'Enviar Respuesta →',
+    markedRelevantBadge: '✓ Marcado Relevante · puntuación de dominio +0.03×(1−puntuación)',
+    markedIrrelevantBadge: '✗ Irrelevante — puntuación de dominio −0.07×puntuación · Re-enrutando…',
+    markedRelevantToast: '✓ Marcado Relevante — Puntuación de dominio RLFF actualizada.',
+    markedIrrelevantToast: '✗ Marcado Irrelevante — puntuación reducida. La consulta será re-enrutada.',
+    escalatedCount: 'escalados',
+    noEscalatedCount: 'No hay consultas escaladas',
+    reroutedEscalatedTitle: 'Consultas Re-enrutadas / Escaladas',
+    noEscalatedFaculty: '✓ Sin consultas escaladas. ¡Excelente trabajo!',
+    goToQuery: 'Ir a la Consulta →',
+    rlffDomainScoreBreakdown: 'Desglose de Puntuación de Dominio RLFF',
+    avgScore: 'Puntuación Promedio',
+    facultyProfileLabel: 'Perfil del Profesor',
+    areasOfExpertise: 'Áreas de Experiencia',
+    noneListed: 'Ninguna listada',
+    activeQueriesLabel: 'Consultas Activas',
+    domainsTracked: 'Dominios Rastreados',
+    yourProjects: 'Tus Proyectos',
+    yourPapers: 'Tus Artículos',
+    noDomainsYet: 'No hay puntuaciones de dominio aún.',
+    refinedQueryLabel: 'Consulta Refinada',
+    nextStepLabel: 'Siguiente Paso',
+    nextStepDescHtml: 'Consulta confirmada y guardada. Vuelve al <strong style="color:var(--navy)">Inicio</strong> y haz clic en <em>Encontrar Profesores →</em> para obtener recomendaciones.',
+    backToHomeBtn: '← Volver al Inicio',
+    researchPapersArxiv: 'Artículos de Investigación de arXiv',
+    noPapersFound: 'No se encontraron artículos para esta consulta. Prueba un tema más específico.',
+    noPendingRequests: 'No hay solicitudes pendientes',
+    studentsWillAppear: 'Los estudiantes aparecerán aquí cuando soliciten un chat.',
+    noConversationsFaculty: 'Sin conversaciones aún',
+    acceptStudentChats: 'Acepta solicitudes de chat de estudiantes para comenzar.',
+    statusPendingLabel: 'Pendiente',
+    statusAcceptedLabel: 'Aceptado',
+    statusDeclinedLabel: 'Rechazado',
+    statusExpiredLabel: 'Expirado',
+    minLeft: 'min restantes',
+    generalResearch: 'Discusión general de investigación',
+    queryConfirmed: '✓ ¡Consulta confirmada!',
+    sendingChatRequest: 'Enviando solicitud de chat…',
+    sendingResponse: 'Enviando respuesta…',
+    pleaseTypeResponse: '⚠ Por favor escribe una respuesta antes de enviar.',
+    confirmQueryFirst: 'Confirma tu consulta primero (Fase 2).',
+    sendQueryFirst: 'Por favor envía una consulta primero.',
+    sessionClosed: 'Sesión cerrada',
+    typeMessage: 'Escribe un mensaje…',
+    acceptBtn: '✓ Aceptar',
+    declineBtn: '✗ Rechazar',
+    researchPaper: 'Artículo de investigación',
+  },
+
+  fr: {
+    pageTitle: 'Scholar Connect — Système de mise en relation IA avec les professeurs',
+    processingQuery: 'Traitement de votre requête…',
+    createAccount: 'Créer un compte',
+    registerSub: 'Inscrivez-vous avec vos identifiants institutionnels.',
+    fullName: 'Nom complet',
+    yourFullName: 'Votre nom complet',
+    institutionalEmail: 'E-mail institutionnel',
+    password: 'Mot de passe',
+    role: 'Rôle',
+    student: 'Étudiant',
+    facultyOption: 'Professeur (e-mail enregistré obligatoire)',
+    cancel: 'Annuler',
+    createAccountBtn: 'Créer un compte →',
+    archiveTagline: 'Archive de la pensée moderne',
+    heroTagline: 'Un symposium curé pour l\'académicien moderne — où la recherche rigoureuse rencontre l\'architecture numérique élégante et le routage de professeurs par IA.',
+    feat1Title: 'Archive Profonde',
+    feat1Desc: 'Accédez à des millions de documents évalués par des pairs via l\'intégration arXiv.',
+    feat2Title: 'Symposium Mondial',
+    feat2Desc: 'Connectez-vous avec des chercheurs de premier plan grâce à la mise en relation IA.',
+    feat3Title: 'Correspondance IA',
+    feat3Desc: 'Routage sémantique des requêtes avec RLFF — apprend de chaque interaction.',
+    feat4Title: 'Suivi en direct',
+    feat4Desc: 'État des requêtes en temps réel avec re-routage automatique et escalade.',
+    estLabel: 'FONDÉ 2024 · Scholar Connect',
+    welcomeBack: 'Bon retour',
+    loginSubtitle: 'Veuillez entrer vos identifiants institutionnels pour continuer.',
+    institutionalId: 'Identifiant institutionnel',
+    demoCredsTitle: 'Identifiants de démo — tous les mots de passe : password123',
+    use: 'Utiliser',
+    faculty: 'Professeur',
+    signInAsRole: 'Connectez-vous selon votre rôle',
+    studentLogin: 'Connexion Étudiant',
+    queryResearch: 'Requêtes et Recherche',
+    facultyLogin: 'Connexion Professeur',
+    panelResponses: 'Panneau et Réponses',
+    newRegister: 'Nouveau ? S\'inscrire',
+    institutionalAccess: 'Accès institutionnel',
+    navHome: 'Accueil',
+    navAI: 'Suggestions IA',
+    navFacultyMatch: 'Correspondance',
+    navQueryTracker: 'Suivi des requêtes',
+    navRerouting: 'Re-routage',
+    navActiveChats: 'Chats actifs',
+    navFacultyPanel: 'Panneau professeur',
+    chatRequestsTitle: 'Demandes de chat',
+    navMyStats: 'Mes statistiques',
+    navReroutingView: 'Vue re-routage',
+    sideNavigation: 'Navigation',
+    sideMonitoring: 'Surveillance',
+    sideChat: 'Chat',
+    tools: 'Outils',
+    logout: 'Déconnexion',
+    aiResearchAssistant: 'Assistant de recherche IA',
+    findRightMentor: 'Trouver le bon mentor universitaire',
+    homeSubtitle: 'Discutez avec l\'IA de votre recherche. Quand votre requête est claire, confirmez et obtenez des recommandations de professeurs.',
+    phaseDiscuss: 'Discuter',
+    phaseConfirm: 'Confirmer',
+    phaseMatch: 'Correspondre',
+    aiGreeting: 'Bonjour ! Parlez-moi de votre intérêt de recherche ou du sujet sur lequel vous avez besoin de l\'aide d\'un professeur. Je vous aiderai à affiner votre requête et à trouver le meilleur mentor.',
+    confirmBarHint: 'Votre requête semble suffisamment précise. Confirmez-la ou continuez à l\'affiner.',
+    confirmQuery: 'Confirmer cette requête →',
+    chatPlaceholder: 'Décrivez votre question de recherche… (Entrée pour envoyer)',
+    send: 'Envoyer',
+    researchPapers: 'Articles de recherche',
+    papersHint: 'Les articles arXiv pertinents apparaîtront au fil de votre conversation.',
+    refineFurther: '← Affiner davantage',
+    findFacultyMatches: 'Trouver des professeurs →',
+    facultyRecommendations: 'Recommandations de professeurs',
+    rankedBy: 'Classé par correspondance sémantique + score de domaine RLFF',
+    back: '← Retour',
+    aiAnalysis: 'Analyse IA',
+    aiAnalysisSub: 'Décomposition intelligente de votre requête avec des pistes de recherche et des articles arXiv',
+    noQueryYet: 'Aucune requête soumise pour l\'instant',
+    goToHome: 'Allez à l\'Accueil et soumettez une requête pour voir l\'analyse IA.',
+    facultyMatchResults: 'Résultats de correspondance',
+    facultyMatchSub: 'Classé par similarité sémantique, expertise de domaine et score RLFF',
+    noMatchesYet: 'Aucune correspondance pour l\'instant',
+    submitFirst: 'Soumettez d\'abord une requête pour voir les recommandations de professeurs.',
+    trackerSub: 'Suivez le statut de vos requêtes soumises et les réponses des professeurs.',
+    loadingQueries: 'Chargement des requêtes…',
+    reroutingVis: 'Visualisation du re-routage',
+    reroutingSubStudent: 'Voyez comment le système s\'adapte quand les requêtes nécessitent un re-routage ou une escalade',
+    loadingRerouting: 'Chargement des données de re-routage…',
+    systemLearning: 'Apprentissage du système (RLFF)',
+    rlffExplain: 'Chaque action de retour d\'information met à jour les poids de classement des professeurs en temps réel grâce à l\'apprentissage par renforcement.',
+    howItWorks: 'Comment ça marche',
+    rlffQuote: '"Les professeurs marquent les requêtes comme pertinentes ou non. Un retour pertinent augmente leur score de domaine de +0,03×(1−score). Un retour non pertinent le réduit de −0,07×score."',
+    escalationLogic: 'Logique d\'escalade',
+    escalationExplain: 'Les requêtes sont automatiquement escaladées quand elles dépassent le délai de réponse ou que le professeur les marque comme non pertinentes.',
+    step1: 'Étape 1 — Routage initial',
+    step1Desc: 'Requête assignée au professeur le mieux classé',
+    step2: 'Étape 2 — Re-routage',
+    step2Desc: 'Si non pertinent ou délai expiré → professeur suivant assigné',
+    step3: 'Étape 3 — Escalade',
+    step3Desc: 'Après 2 tentatives échouées → escalation_level incrémenté',
+    activeChatsSubStudent: 'Gérez vos demandes de chat et conversations en direct avec les professeurs.',
+    refresh: '↻ Actualiser',
+    loading: 'Chargement…',
+    conversations: 'Conversations',
+    noConversations: 'Aucune conversation pour l\'instant',
+    requestChatHint: 'Demandez un chat depuis les résultats de correspondance sur la page d\'Accueil.',
+    facultyPanelSub: 'Examinez les requêtes entrantes des étudiants, marquez la pertinence et répondez. Votre retour met à jour l\'algorithme RLFF.',
+    assignedQueries: 'Requêtes assignées',
+    topDomainScore: 'Score de domaine maximal',
+    rlffUpdated: '↑ RLFF mis à jour',
+    resolvedQueries: 'Requêtes résolues',
+    feedbackDriven: '↑ Amélioration pilotée par le retour',
+    incomingQueries: 'Requêtes entrantes',
+    markRelevance: 'Marquez la pertinence pour améliorer les correspondances futures',
+    chatRequestsSub: 'Étudiants demandant des sessions de chat en direct. Acceptez pour ouvrir une conversation.',
+    loadingRequests: 'Chargement des demandes…',
+    activeChatsSubFaculty: 'Vos conversations en cours avec les étudiants.',
+    noActiveSessions: 'Aucune session active',
+    acceptToStart: 'Acceptez des demandes de chat pour commencer des conversations.',
+    statsTitle: 'Mes statistiques et performances',
+    statsSub: 'La décomposition de votre score RLFF et les évaluations d\'expertise de domaine.',
+    loadingStats: 'Chargement des statistiques…',
+    reroutingSubFaculty: 'Requêtes escaladées et re-routées assignées à votre profil',
+    loadingEscalated: 'Chargement des requêtes escaladées…',
+    rlffImpact: 'Impact de RLFF sur votre score',
+    rlffImpactDesc: 'Vos actions de retour mettent directement à jour votre score de domaine en temps réel via le système RLFF.',
+    howRelevanceHelps: 'Comment la pertinence vous aide',
+    relevanceDesc: 'Marquer les requêtes comme Pertinentes augmente votre score de domaine',
+    relevant: 'Pertinent',
+    relevanceFormula: 'Formule : score += 0,03 × (1 − score)',
+    systemMessage: 'Message du système',
+    systemQuote: '"Des scores de domaine plus élevés signifient que des requêtes plus pertinentes vous sont acheminées en priorité."',
+    thinking: 'Réflexion en cours…',
+    viewLink: 'Voir →',
+    viewOnArxiv: 'Voir sur arXiv →',
+    noFacultyFound: 'Aucun professeur trouvé',
+    rephraseQuery: 'Essayez de reformuler votre requête.',
+    noFacultyMatched: 'Aucun professeur ne correspond à votre requête. Essayez de reformuler.',
+    matchLabel: 'Correspondance:',
+    semanticLabel: 'Sémantique',
+    semanticSimilarity: 'Similarité Sémantique',
+    domainRLFF: 'Domaine (RLFF)',
+    domainScoreRLFF: 'Score de Domaine (RLFF)',
+    finalMatchScore: 'Score de Correspondance Final',
+    sendQueryBtn: 'Envoyer la Requête →',
+    requestChatBtn: '💬 Demander un Chat',
+    goToChatBegin: 'Allez à l\'Accueil et discutez avec l\'IA pour commencer.',
+    completePhase3: 'Complétez la Phase 3 sur la page d\'Accueil pour voir les correspondances ici.',
+    awaitingResponse: 'en attente de réponse',
+    allResolved: 'Tout résolu',
+    facultyResponsesReceived: 'réponses de professeurs reçues',
+    confirmedResearchQuery: 'Requête de recherche confirmée — #',
+    findingFacultyMatches: 'Recherche de correspondances…',
+    facultyMatchesLoaded: 'Correspondances chargées !',
+    noRequestsSent: 'Aucune demande envoyée',
+    requestFromFacultyMatch: 'Demandez un chat depuis les résultats de correspondance.',
+    acceptChatBegin: 'Acceptez une demande de chat pour commencer.',
+    failedLoadQueries: 'Échec du chargement des requêtes',
+    noQueriesYet: 'Aucune requête pour l\'instant',
+    submitQueryStart: 'Soumettez une requête depuis l\'Accueil pour commencer.',
+    liveTimeline: 'Chronologie — Requête #',
+    querySent: 'Requête envoyée',
+    unassigned: 'Non assigné',
+    awaiting: 'En attente…',
+    statusResolved: 'Résolu',
+    statusEscalated: 'Escaladé ⚠',
+    statusPending: 'En attente',
+    statusRouted: 'Routé',
+    statusRerouted: 'Re-routé',
+    facultyLabel: 'Professeur:',
+    notYetAssigned: 'Pas encore assigné',
+    submittedLabel: 'Soumis:',
+    facultyResponseLabel: 'Réponse du Professeur:',
+    reroutingStatus: 'Statut du Re-routage',
+    noActiveReroutes: '✓ Aucun re-routage actif — toutes les requêtes sont en bonne voie.',
+    escalatedBadge: '⚠ Escaladé',
+    reroutedBadge: 'Re-routé',
+    currentlyAssigned: 'Actuellement assigné à:',
+    noQueriesAssigned: 'Aucune requête assignée',
+    checkBackLater: 'Vous n\'avez aucune requête en attente. Revenez plus tard.',
+    fromStudent: 'De l\'étudiant',
+    domainLabel: 'Domaine:',
+    levelLabel: 'Niveau:',
+    general: 'Général',
+    unknown: 'Inconnu',
+    escalatedStatus: 'Escaladé ⚠',
+    newStatus: 'Nouveau',
+    resolvedStatus: 'Résolu',
+    priorityEscalated: 'Priorité: Escaladé',
+    escalatedWarning: '⚠ Cette requête a été escaladée. Réponse haute priorité requise.',
+    yourResponse: 'Votre Réponse:',
+    highPriorityPlaceholder: 'Réponse haute priorité requise…',
+    responsePlaceholderText: 'Tapez votre réponse ou conseil ici…',
+    markRelevantBtn: '✓ Pertinent',
+    markIrrelevantBtn: '✗ Non pertinent — Re-router',
+    sendResponseBtn: 'Envoyer la Réponse →',
+    markedRelevantBadge: '✓ Marqué Pertinent · score de domaine +0.03×(1−score)',
+    markedIrrelevantBadge: '✗ Non pertinent — score −0.07×score · Re-routage…',
+    markedRelevantToast: '✓ Marqué Pertinent — Score de domaine RLFF mis à jour.',
+    markedIrrelevantToast: '✗ Marqué Non pertinent — score réduit. La requête sera re-routée.',
+    escalatedCount: 'escaladés',
+    noEscalatedCount: 'Aucune requête escaladée',
+    reroutedEscalatedTitle: 'Requêtes Re-routées / Escaladées',
+    noEscalatedFaculty: '✓ Aucune requête escaladée. Excellent travail !',
+    goToQuery: 'Aller à la Requête →',
+    rlffDomainScoreBreakdown: 'Décomposition du Score de Domaine RLFF',
+    avgScore: 'Score Moyen',
+    facultyProfileLabel: 'Profil du Professeur',
+    areasOfExpertise: 'Domaines d\'Expertise',
+    noneListed: 'Aucun listé',
+    activeQueriesLabel: 'Requêtes Actives',
+    domainsTracked: 'Domaines Suivis',
+    yourProjects: 'Vos Projets',
+    yourPapers: 'Vos Articles',
+    noDomainsYet: 'Aucun score de domaine pour l\'instant.',
+    refinedQueryLabel: 'Requête Affinée',
+    nextStepLabel: 'Étape Suivante',
+    nextStepDescHtml: 'Requête confirmée et sauvegardée. Retournez à <strong style="color:var(--navy)">l\'Accueil</strong> et cliquez sur <em>Trouver des professeurs →</em> pour obtenir des recommandations.',
+    backToHomeBtn: '← Retour à l\'Accueil',
+    researchPapersArxiv: 'Articles de Recherche arXiv',
+    noPapersFound: 'Aucun article trouvé pour cette requête. Essayez un sujet plus précis.',
+    noPendingRequests: 'Aucune demande en attente',
+    studentsWillAppear: 'Les étudiants apparaîtront ici quand ils demanderont un chat.',
+    noConversationsFaculty: 'Aucune conversation pour l\'instant',
+    acceptStudentChats: 'Acceptez les demandes de chat des étudiants pour commencer.',
+    statusPendingLabel: 'En attente',
+    statusAcceptedLabel: 'Accepté',
+    statusDeclinedLabel: 'Refusé',
+    statusExpiredLabel: 'Expiré',
+    minLeft: 'min restantes',
+    generalResearch: 'Discussion de recherche générale',
+    queryConfirmed: '✓ Requête confirmée !',
+    sendingChatRequest: 'Envoi de la demande de chat…',
+    sendingResponse: 'Envoi de la réponse…',
+    pleaseTypeResponse: '⚠ Veuillez saisir une réponse avant d\'envoyer.',
+    confirmQueryFirst: 'Confirmez d\'abord votre requête (Phase 2).',
+    sendQueryFirst: 'Veuillez d\'abord soumettre une requête.',
+    sessionClosed: 'Session fermée',
+    typeMessage: 'Tapez un message…',
+    acceptBtn: '✓ Accepter',
+    declineBtn: '✗ Refuser',
+    researchPaper: 'Article de recherche',
+  },
+
+  zh: {
+    pageTitle: 'Scholar Connect — AI 教师匹配系统',
+    processingQuery: '正在处理您的查询…',
+    createAccount: '创建账户',
+    registerSub: '使用您的机构凭据进行注册。',
+    fullName: '全名',
+    yourFullName: '您的全名',
+    institutionalEmail: '机构邮箱',
+    password: '密码',
+    role: '角色',
+    student: '学生',
+    facultyOption: '教师（需使用已注册邮箱）',
+    cancel: '取消',
+    createAccountBtn: '创建账户 →',
+    archiveTagline: '现代思想档案馆',
+    heroTagline: '为现代学者打造的精选学术平台——严谨研究与优雅数字架构及 AI 驱动的教师路由在此交汇。',
+    feat1Title: '深度档案',
+    feat1Desc: '通过 arXiv 集成访问数百万篇同行评审文献。',
+    feat2Title: '全球研讨会',
+    feat2Desc: '通过 AI 驱动的匹配与顶尖研究人员建立联系。',
+    feat3Title: 'AI 匹配',
+    feat3Desc: '基于 RLFF 的语义查询路由——从每次教师互动中学习。',
+    feat4Title: '实时追踪',
+    feat4Desc: '具有自动重新路由和升级功能的实时查询状态。',
+    estLabel: '创立于 2024 · Scholar Connect',
+    welcomeBack: '欢迎回来',
+    loginSubtitle: '请输入您的机构凭据以继续。',
+    institutionalId: '机构 ID',
+    demoCredsTitle: '演示凭据 — 所有密码：password123',
+    use: '使用',
+    faculty: '教师',
+    signInAsRole: '以您的角色登录',
+    studentLogin: '学生登录',
+    queryResearch: '查询与研究',
+    facultyLogin: '教师登录',
+    panelResponses: '面板与回复',
+    newRegister: '新用户？注册',
+    institutionalAccess: '机构访问',
+    navHome: '首页',
+    navAI: 'AI 建议',
+    navFacultyMatch: '教师匹配',
+    navQueryTracker: '查询追踪',
+    navRerouting: '重新路由',
+    navActiveChats: '活跃聊天',
+    navFacultyPanel: '教师面板',
+    chatRequestsTitle: '聊天请求',
+    navMyStats: '我的统计',
+    navReroutingView: '路由视图',
+    sideNavigation: '导航',
+    sideMonitoring: '监控',
+    sideChat: '聊天',
+    tools: '工具',
+    logout: '退出登录',
+    aiResearchAssistant: 'AI 研究助手',
+    findRightMentor: '找到合适的教师导师',
+    homeSubtitle: '与 AI 聊聊您的研究。当查询明确后，确认并获取教师推荐。',
+    phaseDiscuss: '讨论',
+    phaseConfirm: '确认',
+    phaseMatch: '匹配',
+    aiGreeting: '您好！请告诉我您的研究兴趣或需要教师指导的主题。我将帮助您完善查询，找到最佳导师。',
+    confirmBarHint: '您的查询已足够具体。请确认或继续完善。',
+    confirmQuery: '确认此查询 →',
+    chatPlaceholder: '描述您的研究问题…（按 Enter 发送）',
+    send: '发送',
+    researchPapers: '研究论文',
+    papersHint: '聊天时相关的 arXiv 论文将会出现。',
+    refineFurther: '← 继续完善',
+    findFacultyMatches: '查找教师匹配 →',
+    facultyRecommendations: '教师推荐',
+    rankedBy: '按语义匹配 + RLFF 领域评分排名',
+    back: '← 返回',
+    aiAnalysis: 'AI 分析',
+    aiAnalysisSub: '对您的查询进行智能拆解，提供研究方向和 arXiv 论文',
+    noQueryYet: '尚未提交查询',
+    goToHome: '前往首页提交查询以查看 AI 分析。',
+    facultyMatchResults: '教师匹配结果',
+    facultyMatchSub: '按语义相似度、领域专长和 RLFF 反馈评分排名',
+    noMatchesYet: '暂无匹配结果',
+    submitFirst: '请先提交查询以查看教师推荐。',
+    trackerSub: '追踪已提交查询的状态和教师回复。',
+    loadingQueries: '正在加载查询…',
+    reroutingVis: '重新路由可视化',
+    reroutingSubStudent: '查看系统在查询需要重新路由或升级时如何适应',
+    loadingRerouting: '正在加载重新路由数据…',
+    systemLearning: '系统学习（RLFF）',
+    rlffExplain: '每个反馈操作通过教师反馈强化学习实时更新教师排名权重。',
+    howItWorks: '工作原理',
+    rlffQuote: '"教师将查询标记为相关或不相关。相关反馈将其领域评分提高 +0.03×(1−评分)，不相关则降低 −0.07×评分。"',
+    escalationLogic: '升级逻辑',
+    escalationExplain: '当查询超过响应超时或教师将其标记为不相关时，系统会自动升级。',
+    step1: '步骤 1 — 初始路由',
+    step1Desc: '查询分配给排名最高的教师',
+    step2: '步骤 2 — 重新路由',
+    step2Desc: '若不相关或超时 → 分配给下一位教师',
+    step3: '步骤 3 — 升级',
+    step3Desc: '两次失败后 → escalation_level 递增',
+    activeChatsSubStudent: '管理您的聊天请求和与教师的实时对话。',
+    refresh: '↻ 刷新',
+    loading: '加载中…',
+    conversations: '对话',
+    noConversations: '暂无对话',
+    requestChatHint: '从首页的教师匹配结果中发起聊天请求。',
+    facultyPanelSub: '审查收到的学生查询，标记相关性并回复。您的反馈将更新 RLFF 匹配算法。',
+    assignedQueries: '已分配查询',
+    topDomainScore: '最高领域评分',
+    rlffUpdated: '↑ RLFF 已更新',
+    resolvedQueries: '已解决查询',
+    feedbackDriven: '↑ 反馈驱动改进',
+    incomingQueries: '收到的查询',
+    markRelevance: '标记相关性以改进未来匹配',
+    chatRequestsSub: '请求实时聊天会话的学生。接受以开始对话。',
+    loadingRequests: '正在加载请求…',
+    activeChatsSubFaculty: '您与学生正在进行的对话。',
+    noActiveSessions: '暂无活跃会话',
+    acceptToStart: '接受聊天请求以开始对话。',
+    statsTitle: '我的统计与表现',
+    statsSub: '您的 RLFF 评分细分和领域专长评级。',
+    loadingStats: '正在加载统计数据…',
+    reroutingSubFaculty: '分配到您档案的已升级和重新路由查询',
+    loadingEscalated: '正在加载已升级查询…',
+    rlffImpact: 'RLFF 对您评分的影响',
+    rlffImpactDesc: '您的反馈操作通过 RLFF 系统实时直接更新您的领域评分。',
+    howRelevanceHelps: '相关性如何帮助您',
+    relevanceDesc: '将查询标记为相关可提高您的领域评分',
+    relevant: '相关',
+    relevanceFormula: '公式：评分 += 0.03 × (1 − 评分)',
+    systemMessage: '系统消息',
+    systemQuote: '"更高的领域评分意味着更多相关查询以更高优先级路由给您。"',
+    thinking: '思考中…',
+    viewLink: '查看 →',
+    viewOnArxiv: '在 arXiv 查看 →',
+    noFacultyFound: '未找到教师',
+    rephraseQuery: '请尝试重新表述您的查询。',
+    noFacultyMatched: '没有教师与您的查询匹配。请尝试重新表述。',
+    matchLabel: '匹配度:',
+    semanticLabel: '语义',
+    semanticSimilarity: '语义相似度',
+    domainRLFF: '领域 (RLFF)',
+    domainScoreRLFF: '领域分数 (RLFF)',
+    finalMatchScore: '最终匹配分数',
+    sendQueryBtn: '发送查询 →',
+    requestChatBtn: '💬 请求聊天',
+    goToChatBegin: '前往首页并与AI对话开始使用。',
+    completePhase3: '在首页完成第3阶段以查看教师匹配结果。',
+    awaitingResponse: '等待回复',
+    allResolved: '全部解决',
+    facultyResponsesReceived: '条教师回复已收到',
+    confirmedResearchQuery: '已确认研究查询 — #',
+    findingFacultyMatches: '正在查找教师匹配…',
+    facultyMatchesLoaded: '教师匹配已加载！',
+    noRequestsSent: '尚未发送请求',
+    requestFromFacultyMatch: '从教师匹配结果中请求聊天。',
+    acceptChatBegin: '接受聊天请求以开始。',
+    failedLoadQueries: '加载查询失败',
+    noQueriesYet: '尚无查询',
+    submitQueryStart: '从首页提交查询以开始。',
+    liveTimeline: '实时时间线 — 查询 #',
+    querySent: '查询已发送',
+    unassigned: '未分配',
+    awaiting: '等待中…',
+    statusResolved: '已解决',
+    statusEscalated: '已升级 ⚠',
+    statusPending: '待处理',
+    statusRouted: '已路由',
+    statusRerouted: '已重新路由',
+    facultyLabel: '教师:',
+    notYetAssigned: '尚未分配',
+    submittedLabel: '提交:',
+    facultyResponseLabel: '教师回复:',
+    reroutingStatus: '重新路由状态',
+    noActiveReroutes: '✓ 无活跃重新路由 — 所有查询均在正常进行。',
+    escalatedBadge: '⚠ 已升级',
+    reroutedBadge: '已重新路由',
+    currentlyAssigned: '当前分配给:',
+    noQueriesAssigned: '没有分配的查询',
+    checkBackLater: '您没有待处理的查询。请稍后查看。',
+    fromStudent: '来自学生',
+    domainLabel: '领域:',
+    levelLabel: '级别:',
+    general: '一般',
+    unknown: '未知',
+    escalatedStatus: '已升级 ⚠',
+    newStatus: '新的',
+    resolvedStatus: '已解决',
+    priorityEscalated: '优先级: 已升级',
+    escalatedWarning: '⚠ 此查询已升级。需要高优先级回复。',
+    yourResponse: '您的回复:',
+    highPriorityPlaceholder: '需要高优先级回复…',
+    responsePlaceholderText: '在此输入您的回复或指导…',
+    markRelevantBtn: '✓ 相关',
+    markIrrelevantBtn: '✗ 不相关 — 重新路由',
+    sendResponseBtn: '发送回复 →',
+    markedRelevantBadge: '✓ 已标记相关 · 领域分数 +0.03×(1−分数)',
+    markedIrrelevantBadge: '✗ 不相关 — 领域分数 −0.07×分数 · 重新路由中…',
+    markedRelevantToast: '✓ 已标记相关 — RLFF 领域分数已更新。',
+    markedIrrelevantToast: '✗ 已标记不相关 — 领域分数降低。查询将被重新路由。',
+    escalatedCount: '已升级',
+    noEscalatedCount: '没有升级的查询',
+    reroutedEscalatedTitle: '重新路由 / 升级查询',
+    noEscalatedFaculty: '✓ 没有升级的查询。保持响应的好工作！',
+    goToQuery: '前往查询 →',
+    rlffDomainScoreBreakdown: 'RLFF 领域分数详情',
+    avgScore: '平均分数',
+    facultyProfileLabel: '教师档案',
+    areasOfExpertise: '专业领域',
+    noneListed: '未列出',
+    activeQueriesLabel: '活跃查询',
+    domainsTracked: '跟踪的领域',
+    yourProjects: '您的项目',
+    yourPapers: '您的论文',
+    noDomainsYet: '暂无领域分数。',
+    refinedQueryLabel: '精炼查询',
+    nextStepLabel: '下一步',
+    nextStepDescHtml: '查询已确认并保存。返回<strong style="color:var(--navy)">首页</strong>，点击<em>查找教师匹配 →</em>获取推荐。',
+    backToHomeBtn: '← 返回首页',
+    researchPapersArxiv: 'arXiv 研究论文',
+    noPapersFound: '此查询未找到论文。请尝试更具体的主题。',
+    noPendingRequests: '没有待处理的请求',
+    studentsWillAppear: '当学生请求聊天时，将在此显示。',
+    noConversationsFaculty: '暂无对话',
+    acceptStudentChats: '接受学生聊天请求以开始。',
+    statusPendingLabel: '待处理',
+    statusAcceptedLabel: '已接受',
+    statusDeclinedLabel: '已拒绝',
+    statusExpiredLabel: '已过期',
+    minLeft: '分钟剩余',
+    generalResearch: '一般研究讨论',
+    queryConfirmed: '✓ 查询已确认！',
+    sendingChatRequest: '正在发送聊天请求…',
+    sendingResponse: '正在发送回复…',
+    pleaseTypeResponse: '⚠ 请在发送前输入回复。',
+    confirmQueryFirst: '请先确认您的查询（阶段2）。',
+    sendQueryFirst: '请先提交查询。',
+    sessionClosed: '会话已关闭',
+    typeMessage: '输入消息…',
+    acceptBtn: '✓ 接受',
+    declineBtn: '✗ 拒绝',
+    researchPaper: '研究论文',
+  }
+};
+
+let currentLang = 'en';
+
+function t(key) {
+  const lang = TRANSLATIONS[currentLang];
+  if (lang && lang[key] !== undefined) return lang[key];
+  return (TRANSLATIONS['en'][key] !== undefined) ? TRANSLATIONS['en'][key] : key;
+}
+
+function toggleLang(btn) {
+  const wrap = btn.closest('.lang-selector-wrap');
+  const dd = wrap.querySelector('.lang-dropdown');
+  const isOpen = dd.classList.contains('open');
+  // Close all open dropdowns first
+  document.querySelectorAll('.lang-dropdown').forEach(d => d.classList.remove('open'));
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('open'));
+  if (!isOpen) {
+    dd.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.lang-selector-wrap') && !e.target.closest('[style*="position:absolute"]')) {
+    document.querySelectorAll('.lang-dropdown').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('open'));
+  }
+});
+
+function setLang(code, optionEl) {
+  if (code === currentLang) {
+    document.querySelectorAll('.lang-dropdown').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('open'));
+    return;
+  }
+  currentLang = code;
+
+  // Show loading bar animation
+  const bar = document.getElementById('langLoadingBar');
+  bar.style.width = '0%';
+  bar.style.transition = 'none';
+  setTimeout(() => {
+    bar.style.transition = 'width 0.5s ease';
+    bar.style.width = '100%';
+    setTimeout(() => { bar.style.width = '0%'; bar.style.transition = 'width 0.3s'; }, 600);
+  }, 10);
+
+  const t = TRANSLATIONS[code];
+  if (!t) return;
+
+  // Update all lang button labels
+  document.querySelectorAll('.lang-current-label').forEach(el => {
+    const labels = { en: 'English', hi: 'हिन्दी', es: 'Español', fr: 'Français', zh: '中文' };
+    el.textContent = labels[code];
+  });
+
+  // Update active state across all dropdowns
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    opt.classList.remove('active');
+    const chk = opt.querySelector('.lang-check');
+    if (chk) chk.style.display = 'none';
+  });
+  document.querySelectorAll('.lang-option').forEach(opt => {
+    const onclickAttr = opt.getAttribute('onclick') || '';
+    if (onclickAttr.includes(`'${code}'`)) {
+      opt.classList.add('active');
+      const chk = opt.querySelector('.lang-check');
+      if (chk) chk.style.display = '';
+    }
+  });
+
+  // Close dropdowns
+  document.querySelectorAll('.lang-dropdown').forEach(d => d.classList.remove('open'));
+  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('open'));
+
+  // Apply all translations
+  applyAllTranslations(t);
+
+  // Refresh dynamic JS-rendered content
+  refreshDynamicLangContent();
+
+  // Update page title
+  document.title = t.pageTitle;
+
+  // Show toast
+  const toastMsgs = { en: '🌐 Language: English', hi: '🌐 भाषा: हिन्दी', es: '🌐 Idioma: Español', fr: '🌐 Langue: Français', zh: '🌐 语言：中文' };
+  fireToast(toastMsgs[code] || '🌐 Language changed');
+}
+
+function refreshDynamicLangContent() {
+  // Re-render dynamic content that uses t() so it updates on language switch
+  const aiContent = document.getElementById('aiContent');
+  if (aiContent && aiContent.querySelector('.empty-state')) {
+    aiContent.innerHTML = `<div class="empty-state"><div class="empty-state-icon">🔍</div><div class="empty-state-title">${t('noQueryYet')}</div><p>${t('goToChatBegin')}</p></div>`;
+  }
+  const fmContent = document.getElementById('facultyMatchContent');
+  if (fmContent && fmContent.querySelector('.empty-state')) {
+    fmContent.innerHTML = `<div class="empty-state"><div class="empty-state-icon">👨‍🏫</div><div class="empty-state-title">${t('noMatchesYet')}</div><p>${t('completePhase3')}</p></div>`;
+  }
+  // Update chat greeting if it's still the initial greeting
+  const msgs = document.getElementById('chatMessages');
+  if (msgs && msgs.children.length === 1 && msgs.querySelector('.chat-msg.ai')) {
+    msgs.innerHTML = `<div class="chat-msg ai"><div class="chat-bubble">${t('aiGreeting')}</div></div>`;
+  }
+  // Update papers hint if it hasn't changed
+  const cp = document.getElementById('chatPapersContent');
+  if (cp && !cp.querySelector('.mini-paper')) {
+    cp.innerHTML = `<div style="color:var(--muted);font-size:12px;line-height:1.6;">${t('papersHint')}</div>`;
+  }
+  // Re-render visible tracker/reroute/inbox if they show empty states
+  ['trackerContent','studentRerouteContent','facultyInboxContent','facultyRerouteContent',
+   'chatRequestsContent','chatSessionsContent','incomingRequestsContent','facultySessionsContent'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && el.querySelector('.empty-state')) el.innerHTML = '';
+  });
+  // Reload data for the currently active page
+  if (curUser?.role === 'student') {
+    loadStudentStats();
+    const activePage = document.querySelector('#studentView .page.active');
+    if (activePage) {
+      const pid = activePage.id.replace('student-','');
+      if (pid === 'tracker' || pid === 'reroute') loadStudentQueries();
+      if (pid === 'activechat') { loadStudentChatRequests(); loadStudentSessions(); }
+    }
+  } else if (curUser?.role === 'faculty') {
+    const activePage = document.querySelector('#facultyView .page.active');
+    if (activePage) {
+      const pid = activePage.id.replace('faculty-','');
+      if (pid === 'panel' || pid === 'reroute') loadFacultyQueries();
+      if (pid === 'stats') loadFacultyProfile();
+      if (pid === 'chatrequests') loadIncomingRequests();
+      if (pid === 'activechat') loadFacultySessions();
+    }
+  }
+}
+
+function applyAllTranslations(translations) {
+  // Translate all elements with data-i18n attribute
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (translations[key] !== undefined) {
+      // Preserve child elements (like badges, spans) — only update text nodes
+      if (el.children.length === 0) {
+        el.textContent = translations[key];
+      } else {
+        // Has child elements — find and update only direct text nodes
+        let updated = false;
+        el.childNodes.forEach(node => {
+          if (node.nodeType === 3 && node.textContent.trim()) {
+            node.textContent = translations[key] + ' ';
+            updated = true;
+          }
+        });
+        // If no text node found, set innerHTML carefully
+        if (!updated) el.textContent = translations[key];
+      }
+    }
+  });
+
+  // Translate placeholder attributes
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+    const key = el.getAttribute('data-i18n-placeholder');
+    if (translations[key] !== undefined) el.placeholder = translations[key];
+  });
+
+  // Update HTML lang attribute
+  document.documentElement.lang = currentLang;
+}
+</script>
+
+</body>
+</html>

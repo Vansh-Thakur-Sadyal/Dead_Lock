@@ -13,3 +13,8 @@ IRRELEVANT_DECREASE = 0.07
 # Routing
 RESPONSE_TIMEOUT_SECONDS = 300  # 5 minutes for hackathon demo
 MAX_ATTEMPTS_BEFORE_ESCALATION = 2
+
+# Auth
+SECRET_KEY = "your-secret-key-change-this"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours

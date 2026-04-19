@@ -125,3 +125,64 @@ if __name__ == "__main__":
     import json
     print(json.dumps(faculty_data, indent=2))
     print(f"\n✅ Generated {len(faculty_data)} faculty records.")
+
+student_data = [
+    {
+        "name": "Rahul Sharma",
+        "email": "rahul@student.edu",
+        "password": "password123",
+        "role": "student"
+    },
+    {
+        "name": "Priya Singh",
+        "email": "priya@student.edu",
+        "password": "password123",
+        "role": "student"
+    },
+    {
+        "name": "Aryan Mehta",
+        "email": "aryan@student.edu",
+        "password": "password123",
+        "role": "student"
+    }
+]
+
+sample_queries = [
+    {
+        "original_query": "I want to do a machine learning project",
+        "refined_query": "Beginner level machine learning project using Python",
+        "domain": "machine learning",
+        "level": "beginner",
+        "student_email": "rahul@student.edu",
+        "assigned_faculty": "Dr. Sharma",
+        "status": "routed"
+    },
+    {
+        "original_query": "Help me with NLP research",
+        "refined_query": "Natural language processing research guidance for intermediate level",
+        "domain": "natural language processing",
+        "level": "intermediate",
+        "student_email": "priya@student.edu",
+        "assigned_faculty": "Dr. Verma",
+        "status": "routed"
+    },
+    {
+        "original_query": "I need help with cloud deployment",
+        "refined_query": "Cloud deployment and DevOps guidance for beginners",
+        "domain": "cloud computing",
+        "level": "beginner",
+        "student_email": "aryan@student.edu",
+        "assigned_faculty": "Dr. Patel",
+        "status": "resolved",
+        "faculty_response": "I can help you with cloud deployment. Start with AWS EC2 basics."
+    },
+    {
+        "original_query": "Cybersecurity project ideas",
+        "refined_query": "Advanced cybersecurity project ideas and implementation guidance",
+        "domain": "cybersecurity",
+        "level": "advanced",
+        "student_email": "rahul@student.edu",
+        "assigned_faculty": None,
+        "status": "pending"
+    }
+]

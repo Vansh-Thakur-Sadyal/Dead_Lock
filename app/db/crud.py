@@ -30,8 +30,15 @@ def decrement_active_queries(db: Session, name: str):
         db.commit()
 
 # --- Query ---
-def create_query(db: Session, original: str, refined: str = None, domain: str = None, level: str = None):
-    q = Query(original_query=original, refined_query=refined, domain=domain, level=level)
+def create_query(db: Session, original: str, refined: str = None, domain: str = None, level: str = None, student_email: str = None, papers: list = None):
+    q = Query(
+        original_query=original,
+        refined_query=refined,
+        domain=domain,
+        level=level,
+        student_email=student_email,
+        research_papers=papers or []
+    )
     db.add(q)
     db.commit()
     db.refresh(q)
